@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>header.html</title>
+</head>
+
+<body>
+    <header class="header" th:fragment="headerFragment">
+        <link rel="stylesheet" href="/css/kyung.css">
+        <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+        <script src="https://code.jquery.com/jquery.min.js"></script>
+        <link rel="stylesheet" href="/css/header.css">
+
+
+        <ul>
+            <a onclick="location.href='/home'">Home</a>
+        </ul>
+
+        <ul>
+            <a id="comu">Community</a>
+            <div id="boardDiv" style="display: none;position: absolute;">
+                <li th:each="menu : ${#servletContext.getAttribute('menuList')}">
+                    <a style="text-shadow:1px 1px 1px #000;" th:href="@{/Board/List(menu_id=${menu.menu_id})}"
+                        th:text="${menu.menu_name}"></a>
+                </li>
+            </div>
+        </ul>
+
+        <ul>
+            <a href="/news">News</a>
+        </ul>
+        <ul>
+            <a href="">Client-Center</a>
+        </ul>
+        <ul>
+            <a href="/userlist">Help</a>
+        </ul>
+        <ul>
+            <a th:href="@{/hello}">Login</a>
+        </ul>
+
+
+        <!-- <a href="/home">Home</a>
+        <a id="BoardList" href="/Board/List">Community
+            <a href="">ggg</a>
+        </a>
+        <a href="/news">News</a>
+        <a href="">Client-Center</a>
+        <a href="/userlist">Help</a>
+        <a href="/loginpage">Login</a> -->
+
+
+        <marquee behavior="alternate" style="position: relative; z-index: -1;">WeleCome Green Sports</marquee>
+        <div style="margin: 0 400px 50px 0;">
+            <h1 id="clock" style="color:white; margin-top: 10px; margin-right: 10px;;">clock</h1>
+        </div>
+
+        <script>
+            let hd$ = jQuery.noConflict(); // 다른 html jquery 랑 충돌일어나서 바꿈
+            let comuEl = hd$('#comu');
+
+            comuEl.click(function () {
+                var targetSubMenu = hd$(this).next("#boardDiv");
+
+                for (var i = 0; i < comuEl.length; i++) {
+                    if (hd$(this).text() == comuEl[i].innerText) {
+                        if (targetSubMenu.is(":visible")) {
+                            for (let j = 0; j < targetSubMenu.length; j++) {
+                                targetSubMenu.slideUp();
+                            }
+
+
+                        } else {
+                            for (let k = 0; k < targetSubMenu.length; k++) {
+                                targetSubMenu.slideDown();
+
+                            }
+                        }
+                    } else {
+                        hd$(comuEl[i]).next(".liBoard").css("display", "none");
+                    }
+                }
+            });
+
+        </script>
+
+    </header>
+</body>
+
+</html>

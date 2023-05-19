@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+</head>
+<body style="display: flex; justify-content: center;">
+    <style>
+        #allPage {
+            display: grid;
+            grid-template-columns: 400px 1000px 400px;
+            grid-template-rows: 900px;
+            column-gap: 10px;
+        }
+        .left_side {
+            order: 1;
+        }
+        .right_side {
+            order: 3;
+        }
+        #contents { 
+            order: 2;
+            background-color: white; border: 2px solid #5d5d5d;
+        }
+    </style>
+
+<div id="wrap">
+    <header id="header" th:replace="~{/fragments/header :: headerFragment}"></header>
+    <div id="allPage">
+        <section id="left_side" th:replace="~{/fragments/left_side :: leftFragment}"></section>
+        <div id="contents">wow</div>
+        <div id="right_side" th:replace="~{/fragments/right_side :: rightFragment}"></div>
+    </div>
+</div>
+    
+</body>
+</html>

@@ -1,0 +1,24 @@
+#lsidebar {
+    display: flex;
+    flex-direction: column;
+    height: 1000px;
+}
+
+#lsidebar1 {
+    text-align: center;
+    flex-grow: 0.1;
+    background: white;
+    border: 2px solid #5d5d5d;
+    font: bold;
+}
+
+#lsidebar2 {
+    margin-top: 10px;
+    flex-grow: 1;
+    background: white;
+    border: 2px solid #5d5d5d;
+}
+
+.login-form {
+    margin-top: 30px;
+}
