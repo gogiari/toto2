@@ -25,6 +25,17 @@
             background-color: white; border: 2px solid #5d5d5d;
             padding: 30px 20px;
         }
+        table {
+            width: 100%;
+            margin-top: 10px;
+        }
+        table, td ,tr {
+            border: 1px solid black;
+        }
+        .board:hover{
+            background-color: aliceblue;
+            cursor: pointer;
+        }
     </style>
 
     <div id="wrap">
@@ -35,18 +46,17 @@
             <div id="contents">
                 <div id="mainlist">
                     <h2 style="text-align: center;" th:text="${menu.menu_name}"></h2>
+                    <hr>
+                    <div style="text-align: right;">
+                        <th:block th:if="${session.user}">
+                            <button th:onclick="|location.href='@{/Board/WriteForm(menu_id=${param.menu_id})}'|">글쓰기</button>
+                        </th:block>
+                        <th:block th:if="${session.user == null}">
+                            <span>로그인을 하셔야 글쓰기가 가능합니다(</span><a th:href="@{/loginpage}">로그인 바로가기</a><span>)</span>
+                        </th:block>
+                    </div>
                     <table>
                         <tr  class="boardt">
-                            <td style="text-align: center;" colspan="5">
-                                <th:block th:if="${session.user}">
-                                    <a th:href="@{/Board/WriteForm(menu_id=${param.menu_id})}">글쓰기</a>
-                                </th:block>
-                                <th:block th:if="${session.user == null}">
-                                    <span>로그인을 하셔야 글쓰기가 가능합니다(</span><a th:href="@{/loginpage}">로그인 바로가기</a><span>)</span>
-                                </th:block>
-                            </td>
-                        </tr>
-                        <tr>
                             <th>번호</th>
                             <th>제목</th>
                             <th>글쓴이</th>

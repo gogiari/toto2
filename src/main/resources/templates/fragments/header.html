@@ -24,7 +24,7 @@
             <div id="comu">
             <a>Community</a>
             <div id="menus" style="position: relative;">
-                <div id="boardDiv" style="border-radius: 4px; display: none; position: absolute; background-color: aliceblue; padding: 5px 0;">
+                <div id="boardDiv" style="border-radius: 4px; display: none; position: absolute; background-color: #B6CDF2; padding: 5px 0; padding-bottom: 10px;">
                     <li th:each="menu : ${#servletContext.getAttribute('menuList')}">
                         <th:blcok th:if="${menu.menu_name != '갤러리'}">
                             <a style="text-shadow:1px 1px 1px #000;" th:href="@{/Board/List(menu_id=${menu.menu_id})}"
