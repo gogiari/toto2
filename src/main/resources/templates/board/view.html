@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+</head>
+<body style="display: flex; justify-content: center;">
+    <style>
+        #allPage {
+            display: grid;
+            grid-template-columns: 400px 1000px 400px;
+            grid-template-rows: 1000px;
+            column-gap: 10px;
+        }
+        .left_side {
+            order: 1;
+        }
+        .right_side {
+            order: 3;
+        }
+        #contents {
+            order: 2;
+            background-color: white; border: 2px solid #5d5d5d;
+            padding: 30px 20px;
+        }
+    </style>
+
+    <div id="wrap">
+        <header id="header" th:replace="~{/fragments/header :: headerFragment}"></header>
+        <div id="allPage">
+            <section id="left_side" th:replace="~{/fragments/left_side :: leftFragment}"></section>
+            <div id="right_side" th:replace="~{/fragments/right_side :: rightFragment}"></div>
+            <div id="contents" style="overflow-y: scroll;">
+                <h1 id="title" th:text="${boardVo.title}"></h1>
+                <hr>
+            <div id="util_area">
+                <div id="div_left" style="float: left;" th:text="|작성자 : ${boardVo.writer}|"></div>
+                <div id="div_right" style="float: right;" th:text="|작성일 : ${boardVo.regdate}|"></div>
+            </div>
+            <br><hr>
+            <p id="hidcont" hidden th:text="${boardVo.cont}"></p>
+            <div id="cont"></div>
+            <hr><br>
+            <th:block th:if="${session.user}">
+                <th:block th:if="${session.user.username == boardVo.writer or session.user.username == '관리자'}">
+                    <input type="button" th:onclick="|location.href='@{UpdateForm(idx=${param.idx},menu_id=${param.menu_id})}'|" value="수정">
+                    <input type="button" value="삭제">
+                </th:block>
+            </th:block>
+            <th:block  th:if="${boardVo.menu_id == 'MENU04'}">
+                <input type="button" th:onclick="|location.href='@{/ImageBoard/List}'|" value="목록">
+            </th:block>
+            <th:block th:if="${boardVo.menu_id != 'MENU04'}">
+                <input type="button" th:onclick="|location.href='@{List(menu_id=${param.menu_id})}'|" value="목록">
+            </th:block>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    let fuck = document.getElementById('hidcont').innerText;
+    $('#cont').append(fuck);
+    $('input[value="삭제"]').click(function (){
+        if(confirm('게시글을 정말 삭제하시겠습니까?') == true ) {
+            alert('게시글을 삭제 하였습니다.');
+            location.href="/Board/Delete?idx=[[${param.idx}]]&menu_id=[[${param.menu_id}]]";
+        } else {
+            alert('취소 했습니다.');
+            return;
+        }
+    });
+</script>
+</html>

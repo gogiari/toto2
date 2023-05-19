@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>메뉴등록</title>
+    <style>
+        table, tr, th, td { border: 1px solid black;
+            border-collapse: collapse;}
+    tr:last-child td { padding-right: 40px; text-align: right;}
+    </style>
+</head>
+
+<body>
+    <h2>메뉴등록</h2>
+    <br>
+    <form action="/Menu/Write" method="post">
+        <div>
+            <table>
+                    <tr>
+                        <th>메뉴이름</th>
+                        <td><input type="text" name="menu_name"></td>
+                    </tr>
+                    <tr>
+
+                    <tr>
+                        <td colspan="2">
+                        <input type="submit" value="메뉴등록">
+                        </td>
+                    </tr>
+            </table>
+        </div>
+    </form>
+</body>
+
+</html>

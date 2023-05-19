@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.toto.user.mapper.UserMapper"> 
+
+    <select id="getUserList"
+              resultType="com.example.toto.user.vo.UserVo">
+      SELECT USERID, PASSWD, USERNAME, EMAIL, INDATE
+       FROM  TUSER
+       ORDER BY INDATE ASC
+    </select>
+
+    <select id="getUser"
+            resultType="com.example.toto.user.vo.UserVo">
+        SELECT  USERID
+   	         , PASSWD
+   	         , USERNAME
+   	         , EMAIL
+   	         , TO_CHAR(INDATE, 'YYYY-MM-DD HH24:MI:SS')  INDATE
+   	    FROM   TUSER 
+   	    WHERE  USERID = #{ userid }
+    </select>
+
+    <select id="getUserLog"
+            parameterType="map"
+            resultType="com.example.toto.user.vo.UserVo">
+        SELECT  USERID
+   	         , PASSWD
+   	         , USERNAME
+   	         , EMAIL
+   	         , TO_CHAR(INDATE, 'YYYY-MM-DD HH24:MI:SS')  INDATE
+   	    FROM   TUSER 
+   	    WHERE  USERID = #{ userid }
+          AND  PASSWD = #{ passwd }
+    </select>
+
+    <insert id="insertUser">
+
+        INSERT INTO TUSER (
+              USERID
+            , PASSWD
+            , USERNAME
+            , EMAIL
+        ) VALUES (
+              #{ userid }
+            , #{ passwd }
+            , #{ username }
+            , #{ email }
+        )
+
+    </insert>
+
+    <delete id="deleteUser">
+        DELETE FROM TUSER
+         WHERE USERID = #{ userid }
+    </delete>
+
+</mapper>

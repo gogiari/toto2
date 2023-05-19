@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>사용자 정보</title>
+    <link rel="shortcut icon" href="/img/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="/css/common.css">
+    <style>
+        #main {margin-left: 40px;}
+    </style>
+</head>
+<body>
+    <div id="main">
+            <h2>사용자 정보</h2>
+            <table>
+            <tr>
+                <th>아이디</th>
+                <td th:text="${user.userid}"></td>
+            </tr>
+            <tr>
+                <th>암호</th>
+                <td th:text="${user.passwd}"></td>
+            </tr>
+            <tr>
+                <th>이름</th>
+                <td th:text="${user.username}"></td>
+            </tr>
+            <tr>
+                <th>이메일</th>
+                <td th:text="${user.email}"></td>
+            </tr>
+            <tr>
+                <th>가입일</th>
+                <td th:text="${user.indate}"></td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <button onclick="location.href='/User/WriteForm'" >회원가입</button>
+                    <button>수정</button>
+                    <button>삭제</button>
+                    <button>목록</button>
+                    <button>홈으로</button>
+                </td>
+            </tr>
+        </table>
+    </div>
+</body>
+</html>

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.toto.board.mapper.BoardMapper">
+    <select id="getBoardList"
+            resultType="com.example.toto.board.vo.BoardVo">
+    SELECT
+    B.IDX,
+    B.MENU_ID,
+    TITLE,
+    CONT,
+    WRITER,
+    CASE
+    WHEN TO_CHAR(REGDATE, 'YYYYMMDD') = TO_CHAR(SYSDATE, 'YYYYMMDD') THEN TO_CHAR(REGDATE, 'HH24:MI')
+    WHEN TO_CHAR(REGDATE, 'YYYY') = TO_CHAR(SYSDATE, 'YYYY') THEN TO_CHAR(REGDATE, 'MM.DD')
+    ELSE TO_CHAR(REGDATE, 'YY.MM.DD') END AS REGDATE,
+    READCOUNT,
+    BNUM,
+    LVL,
+    STEP,
+    NREF,
+    DELNUM,
+    PARENT,
+    M.MENU_NAME
+FROM
+    BOARD B LEFT JOIN MENUS M ON B.MENU_ID = M.MENU_ID
+WHERE
+    B.MENU_ID = #{menu_id}
+ORDER BY
+    B.IDX DESC
+    </select>
+
+    <select id="getBoard"
+        resultType="com.example.toto.board.vo.BoardVo">
+
+        SELECT
+            IDX,
+            MENU_ID,
+            TITLE,
+            CONT,
+            WRITER,
+            REGDATE,
+            READCOUNT,
+            BNUM,
+            LVL,
+            STEP,
+            NREF,
+            DELNUM,
+            PARENT
+        FROM
+            BOARD
+         WHERE IDX = #{ idx }
+
+    </select>
+
+    <insert id="insertBoard">
+        INSERT INTO BOARD(
+            IDX,
+            MENU_ID,
+            TITLE,
+            CONT,
+            WRITER,
+            READCOUNT,
+            BNUM,
+            LVL,
+            STEP,
+            NREF,
+            DELNUM,
+            PARENT
+        )
+        VALUES
+        (
+            (SELECT NVL(MAX(IDX), 0)+1 FROM BOARD),
+            #{ menu_id },
+            #{ title },
+            #{ cont },
+            #{ writer },
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+        )
+
+    </insert>
+    <update id="updateBoard">
+        UPDATE BOARD
+        SET   TITLE = #{title},
+              CONT  = #{cont}
+        WHERE IDX = #{idx}
+    </update>
+
+    <delete id="deleteBoard">
+        DELETE BOARD WHERE IDX = #{ idx }
+    </delete>
+</mapper>

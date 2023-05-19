@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User List</title>
+    <style>
+        .menu:hover { cursor: pointer; color: red; }
+    </style>
+</head>
+<body>
+    <table>
+        <tr>
+            <th>순서</th>
+            <th>아이디</th>
+            <th>메뉴이름</th>
+            <th>메뉴seq</th>
+        </tr>
+        <tr class="menu" th:each="menu : ${menuList}" th:onclick="|location.href='@{UpdateForm(menu_id=${menu.menu_id})}'|">
+            <td th:text="${menuStat.index+1}"></td>
+            <td th:text="${menu.menu_id}"></td>
+            <td th:text="${menu.menu_name}"></td>
+            <td th:text="${menu.menu_seq}"></td>
+        </tr>
+    </table>
+</body>
+</html>

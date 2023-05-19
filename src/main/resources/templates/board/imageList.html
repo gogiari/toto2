@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+</head>
+
+<body style="display: flex; justify-content: center;">
+    <style>
+        #allPage {
+            display: grid;
+            grid-template-columns: 400px 1000px 400px;
+            grid-template-rows: 1000px;
+            column-gap: 10px;
+        }
+
+        .left_side {
+            order: 1;
+        }
+
+        .right_side {
+            order: 3;
+        }
+
+        #contents {
+            order: 2;
+            background-color: white;
+            border: 2px solid #5d5d5d;
+            padding: 30px 20px;
+        }
+    </style>
+
+    <div id="wrap">
+        <header id="header" th:replace="~{/fragments/header :: headerFragment}"></header>
+        <div id="allPage">
+            <section id="left_side" th:replace="~{/fragments/left_side :: leftFragment}"></section>
+            <div id="right_side" th:replace="~{/fragments/right_side :: rightFragment}"></div>
+            <div id="contents">
+                <h2 style="text-align: center;margin: 10px 0 10px 0;">갤러리</h2>
+            <hr style="margin-bottom: 10px;">
+            <th:block th:if="${session.user}">
+                <span th:if="${session.user.userid == 'admin'}">관리자만보임 : 반드시 게시판이름이 "갤러리"이여야함</span>
+            </th:block>
+            <th:block th:if="${session.user}">
+                <button style="float: right;"
+                    th:onclick="|location.href='@{/Board/WriteForm(menu_id=MENU04)}'|">글쓰기</button>
+            </th:block>
+            <th:block th:if="${session.user == null}">
+                <div style="float: right;"><span>로그인을 하셔야 글쓰기가 가능합니다</span><button
+                        th:onclick="|location.href='@{/loginpage}'|">로그인</button></div>
+            </th:block>
+            <br>
+            <div style="padding: 10px 0 0 13px;">
+                <div class="imgList" th:each="imgList : ${imageList}"
+                    th:onclick="|location.href='@{/Board/View(menu_id=${imgList.menu_id},idx=${imgList.idx})}'|"
+                    style="padding: 5px;border: 1px solid black;width: 210px; height: 220px;float: left; margin: 10px 5px 10px 5px;">
+                    <div class="hididximg" hidden></div>
+                    <div class="idximg"
+                        style="display: flex; justify-content: center; align-items: center; width: 100%; height: 150px; background-color: #ebebeb;">
+                    </div>
+                    <p style="font-weight: bold; text-align: center;" th:text="${imgList.title}"></p>
+                    <div style="margin-top: 10px;">
+                        <i class='bx bx-edit-alt'></i>
+                        <span th:text="${imgList.writer}"></span>
+                        <span style="float: right;" th:text="${imgList.readcount}"></span>
+                        <i style="float: right;" class='bx bx-show-alt bx-tada'></i>
+                        <span hidden class="hidcont" style="float: right;" th:text="${imgList.cont}"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    let hididximgEl = document.querySelectorAll('.hididximg');
+    let idximgEl = document.querySelectorAll('.idximg');
+    // alert('[[${imageList.size()}]]');
+    for (let i = 0; i < '[[${imageList.size()}]]'; i++) {
+        hididximgEl[i].innerHTML = document.querySelectorAll('.hidcont')[i].textContent;
+        if ((hididximgEl[i].querySelectorAll('iframe')[0]) != null) {
+            let ytid = hididximgEl[i].querySelectorAll('iframe')[0].src.match(/youtube\.com\/embed\/([^?]+)/)[1];
+            // alert(ytid);
+            hididximgEl[i].innerHTML = `<img src="https://img.youtube.com/vi/${ytid}/0.jpg">`;
+        }
+        if ((hididximgEl[i].querySelectorAll('img')[0]) != null) {
+            idximgEl[i].appendChild(hididximgEl[i].querySelectorAll('img')[0]);
+            idximgEl[i].querySelectorAll('img')[0].style.width = 'auto';
+            idximgEl[i].querySelectorAll('img')[0].style.maxWidth = '100%';
+            idximgEl[i].querySelectorAll('img')[0].style.maxHeight = '150px';
+
+        }
+    }
+
+</script>
+
+</html>

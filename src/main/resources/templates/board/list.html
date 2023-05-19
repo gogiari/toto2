@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+</head>
+<body style="display: flex; justify-content: center;">
+    <style>
+        #allPage {
+            display: grid;
+            grid-template-columns: 400px 1000px 400px;
+            grid-template-rows: 1000px;
+            column-gap: 10px;
+        }
+        .left_side {
+            order: 1;
+        }
+        .right_side {
+            order: 3;
+        }
+        #contents {
+            order: 2;
+            background-color: white; border: 2px solid #5d5d5d;
+            padding: 30px 20px;
+        }
+    </style>
+
+    <div id="wrap">
+        <header id="header" th:replace="~{/fragments/header :: headerFragment}"></header>
+        <div id="allPage">
+            <section id="left_side" th:replace="~{/fragments/left_side :: leftFragment}"></section>
+            <div id="right_side" th:replace="~{/fragments/right_side :: rightFragment}"></div>
+            <div id="contents">
+                <div id="mainlist">
+                    <h2 style="text-align: center;" th:text="${menu.menu_name}"></h2>
+                    <table>
+                        <tr  class="boardt">
+                            <td style="text-align: center;" colspan="5">
+                                <th:block th:if="${session.user}">
+                                    <a th:href="@{/Board/WriteForm(menu_id=${param.menu_id})}">글쓰기</a>
+                                </th:block>
+                                <th:block th:if="${session.user == null}">
+                                    <span>로그인을 하셔야 글쓰기가 가능합니다(</span><a th:href="@{/loginpage}">로그인 바로가기</a><span>)</span>
+                                </th:block>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>번호</th>
+                            <th>제목</th>
+                            <th>글쓴이</th>
+                            <th>날짜</th>
+                            <th>조회수</th>
+                        </tr>
+                        <tr class="board" th:each="board : ${boardList}" th:onclick="|location.href='@{View(idx=${board.idx},menu_id=${param.menu_id})}'|">
+                            <td style="text-align: center;" th:text="${ board.idx }"></td>
+                            <td style="padding-left: 10px;" th:text="${ board.title }"></td>
+                            <td style="text-align: center;" th:text="${ board.writer }"></td>
+                            <td style="text-align: center;" th:text="${ board.regdate }"></td>
+                            <td style="text-align: center;" th:text="${ board.readcount }"></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,209 @@
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+</head>
+
+<body style="display: flex; justify-content: center;" class="vsc-initialized">
+    <style>
+        .header ul {
+            float: left;
+        }
+
+        body {
+            width: 100%;
+            height: 120vh;
+            background: url('/img/bg2.jpg') no-repeat center;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .header a {
+            cursor: pointer;
+            font-size: 20px;
+            color: aliceblue;
+            text-decoration: none;
+            font-weight: 500;
+            margin-right: 30px;
+
+        }
+
+        .header li {
+            list-style: none;
+        }
+
+        #allPage {
+            display: grid;
+            grid-template-columns: 400px 1000px 400px;
+            grid-template-rows: 900px;
+            column-gap: 10px;
+        }
+
+        .left_side {
+            order: 1;
+        }
+
+        .right_side {
+            order: 3;
+        }
+
+        #contents {
+            order: 2;
+            background-color: white;
+            border: 2px solid #5d5d5d;
+        }
+    </style>
+
+    <div id="wrap">
+        <header class="header">
+            <!-- <link rel="stylesheet" href="/css/kyung.css"> -->
+            <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+            <script src="https://code.jquery.com/jquery.min.js"></script>
+
+
+            <ul>
+                <a onclick="location.href='/home'">Home</a>
+            </ul>
+
+            <ul>
+                <a id="comu">Community</a>
+                <div id="boardDiv" style="display: none;">
+
+                </div>
+            </ul>
+
+            <ul>
+                <a href="/news">News</a>
+            </ul>
+            <ul>
+                <a href="">Client-Center</a>
+            </ul>
+            <ul>
+                <a href="/userlist">Help</a>
+            </ul>
+            <ul>
+                <a href="/loginpage">Login</a>
+            </ul>
+
+
+
+
+            <!-- <a href="/home">Home</a>
+        <a id="BoardList" href="/Board/List">Community
+            <a href="">ggg</a>
+        </a>
+        <a href="/news">News</a>
+        <a href="">Client-Center</a>
+        <a href="/userlist">Help</a>
+        <a href="/loginpage">Login</a> -->
+
+
+            <marquee behavior="alternate" style="position: relative; z-index: -1;">WeleCome Green Sports</marquee>
+            <div style="text-align: right; margin: 0 450px 10px 0;">
+                <h1 id="clock" style="color:white; margin: 0 10px 0 0;">2023.5. 19 FRI 12:26:15</h1>
+            </div>
+
+            <script>
+                var Target = document.getElementById("clock");
+                function clock() {
+                    var time = new Date();
+
+                    var year = time.getFullYear();
+                    var month = time.getMonth();
+                    var date = time.getDate();
+                    var day = time.getDay();
+                    var week = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
+
+                    var hours = time.getHours();
+                    var minutes = time.getMinutes();
+                    var seconds = time.getSeconds();
+
+
+                    Target.innerText =
+                        `${year}.${month + 1}. ${date} ${week[day]} ` +
+                        `${hours < 10 ? `0${hours}` : hours}:${minutes < 10 ? `0${minutes}` : minutes}:${seconds < 10 ? `0${seconds}` : seconds}`;
+
+                }
+                clock();
+                setInterval(clock, 1000); // 1초마다 실행
+
+                let hd$ = jQuery.noConflict(); // 다른 html jquery 랑 충돌일어나서 바꿈
+                hd$(document).ready(function () {
+                    let comuEl = hd$('#comu');
+                    let targetSubMenu = hd$("#boardDiv");
+
+                    comuEl.click(function () {
+                        if (targetSubMenu.is(":visible")) {
+                            targetSubMenu.slideUp();
+                        } else {
+                            targetSubMenu.slideDown();
+                        }
+                    });
+                });
+
+            </script>
+
+        </header>
+        <div id="allPage">
+            <section class="left_side">
+                <link rel="stylesheet" href="/css/left_side.css">
+                <div id="main">
+                    <div id="lsidebar">
+                        <div id="lsidebar1">
+                            <div class="hlog">
+                                <section class="login-form">
+                                    <form action="">
+                                        <div class="int-area">
+                                            <h1 class="logf">LOGIN</h1>
+                                            <input type="text" name="id" id="id" autocomplete="off" required="">
+                                            <br><label for="id">USER NAME</label>
+                                        </div>
+                                        <div class="int-area">
+                                            <input type="password" name="pw" id="pw" autocomplete="off" required="">
+                                            <br><label for="pw">PASSWORD</label>
+                                        </div>
+                                        <div class="btn-area" style="padding-bottom: 10px;">
+                                            <button type="submit"
+                                                style="width: 4cm;height: 0.8cm; font-size: 20px;font-weight: bold; padding-bottom: 10px;">login</button>
+                                        </div>
+                                    </form>
+                                    <div class="caption">
+                                        <a href="">Forgot Password?</a>
+                                        <span>/</span><br>
+                                        <a href="">Create An Account!</a>
+                                    </div>
+                                </section>
+                            </div>
+                        </div>
+                        <div id="lsidebar2">
+                            <iframe width="280" height="500" frameborder="0" framespacing="0" marginheight="0"
+                                marginwidth="0" scrolling="yes" vspace="0"
+                                src="http://192.168.0.197:8083/chat/JeaDragon"></iframe>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <div class="right_side">
+                <link rel="stylesheet" href="/css/right_side.css">
+                <div id="right_side_top" style="height: 400px;">
+                    <p>userlist</p>
+                </div>
+                <div id="right_side_bottom">
+                    <p>광고</p>
+                    <p>광고</p>
+                    <p>광고</p>
+                    <p>광고</p>
+                </div>
+
+            </div>
+            <div id="contents"></div> <!-- 현재 페이지를 넣ㅎㅎ -->
+        </div>
+    </div>
+
+
+</body>
+
+</html>

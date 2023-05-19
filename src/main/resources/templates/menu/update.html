@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>메뉴수정</title>
+    <style>
+        table, tr, th, td { border: 1px solid black;
+            border-collapse: collapse;}
+    tr:last-child td { padding-right: 40px; text-align: right;}
+    </style>
+</head>
+
+<body>
+    <h2>메뉴수정</h2>
+    <br>
+    <form th:action="@{Update(menu_id=${menuVo.menu_id})}" method="post">
+        <div>
+            <table>
+                    <tr>
+                        <th>메뉴이름</th>
+                        <td><input type="text" name="menu_name" th:value="${menuVo.menu_name}"></td>
+                    </tr>
+                    <tr>
+
+                    <tr>
+                        <td colspan="2">
+                        <input id="hi" type="submit" value="메뉴수정">
+                        <input type="button" onclick="location.href='/Menu/WriteForm'" value="메뉴새로만들기">
+                        <input type="button" th:onclick="|location.href='@{Delete(menu_id=${menuVo.menu_id})}'|" value="메뉴삭제">
+                        <input onclick="window.history.back()" type="button" value="취소">
+                        </td>
+                    </tr>
+            </table>
+        </div>
+    </form>
+    
+</body>
+<script>
+    let wow = document.querySelector('input[value="메뉴삭제"]').onclick = function() {
+        if(confirm('[[${menuVo.menu_name}]]을 정말삭제 하시겠습니까?') == true ){
+            alert('삭제했습니다.');
+            location.href="/Menu/Delete?menu_id=[[${menuVo.menu_id}]]";
+        } else {
+            alert('취소하였습니다.');
+            return;
+        }
+    }
+</script>
+
+</html>

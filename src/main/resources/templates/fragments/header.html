@@ -10,7 +10,7 @@
 
 <body>
     <header class="header" th:fragment="headerFragment">
-        <link rel="stylesheet" href="/css/kyung.css">
+        <!-- <link rel="stylesheet" href="/css/kyung.css"> -->
         <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
         <script src="https://code.jquery.com/jquery.min.js"></script>
         <link rel="stylesheet" href="/css/header.css">
@@ -21,13 +21,23 @@
         </ul>
 
         <ul>
-            <a id="comu">Community</a>
-            <div id="boardDiv" style="display: none;position: absolute;">
-                <li th:each="menu : ${#servletContext.getAttribute('menuList')}">
-                    <a style="text-shadow:1px 1px 1px #000;" th:href="@{/Board/List(menu_id=${menu.menu_id})}"
-                        th:text="${menu.menu_name}"></a>
-                </li>
+            <div id="comu">
+            <a>Community</a>
+            <div id="menus" style="position: relative;">
+                <div id="boardDiv" style="border-radius: 4px; display: none; position: absolute; background-color: aliceblue; padding: 5px 0;">
+                    <li th:each="menu : ${#servletContext.getAttribute('menuList')}">
+                        <th:blcok th:if="${menu.menu_name != '갤러리'}">
+                            <a style="text-shadow:1px 1px 1px #000;" th:href="@{/Board/List(menu_id=${menu.menu_id})}"
+                                th:text="${menu.menu_name}"></a>
+                        </th:blcok>
+                        <th:blcok th:if="${menu.menu_name == '갤러리'}">
+                            <a style="text-shadow:1px 1px 1px #000;" th:href="@{/ImageBoard/List}"
+                                th:text="${menu.menu_name}"></a>
+                        </th:blcok>
+                    </li>
+                </div>
             </div>
+        </div>
         </ul>
 
         <ul>
@@ -39,8 +49,14 @@
         <ul>
             <a href="/userlist">Help</a>
         </ul>
-        <ul>
-            <a th:href="@{/hello}">Login</a>
+        <ul th:if="${session.user} == null">
+            <a th:href="@{/loginpage}">Login</a>
+        </ul>
+        <ul th:if="${session.user}">
+            <a th:href="@{/hello}">MaPage</a>
+        </ul>
+        <ul th:if="${session.user}">
+            <a id="logout" th:href="@{/logout}">Logout</a>
         </ul>
 
 
@@ -55,35 +71,46 @@
 
 
         <marquee behavior="alternate" style="position: relative; z-index: -1;">WeleCome Green Sports</marquee>
-        <div style="margin: 0 400px 50px 0;">
-            <h1 id="clock" style="color:white; margin-top: 10px; margin-right: 10px;;">clock</h1>
+        <div style="text-align: right; margin: 0 450px 10px 0;">
+            <h1 id="clock" style="color:white; margin: 0 10px 0 0;">clock</h1>
         </div>
 
         <script>
-            let hd$ = jQuery.noConflict(); // 다른 html jquery 랑 충돌일어나서 바꿈
-            let comuEl = hd$('#comu');
+            var Target = document.getElementById("clock");
+            function clock() {
+                var time = new Date();
 
-            comuEl.click(function () {
-                var targetSubMenu = hd$(this).next("#boardDiv");
+                var year = time.getFullYear();
+                var month = time.getMonth();
+                var date = time.getDate();
+                var day = time.getDay();
+                var week = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
 
-                for (var i = 0; i < comuEl.length; i++) {
-                    if (hd$(this).text() == comuEl[i].innerText) {
-                        if (targetSubMenu.is(":visible")) {
-                            for (let j = 0; j < targetSubMenu.length; j++) {
-                                targetSubMenu.slideUp();
-                            }
+                var hours = time.getHours();
+                var minutes = time.getMinutes();
+                var seconds = time.getSeconds();
 
 
-                        } else {
-                            for (let k = 0; k < targetSubMenu.length; k++) {
-                                targetSubMenu.slideDown();
+                Target.innerText =
+                    `${year}.${month + 1}. ${date} ${week[day]} ` +
+                    `${hours < 10 ? `0${hours}` : hours}:${minutes < 10 ? `0${minutes}` : minutes}:${seconds < 10 ? `0${seconds}` : seconds}`;
 
-                            }
-                        }
+            }
+            clock();
+            setInterval(clock, 1000); // 1초마다 실행
+
+            // let hd$ = jQuery.noConflict(); // 다른 html jquery 랑 충돌일어나서 바꿈
+            $(document).ready(function () {
+                let comuEl = $('#comu');
+                let targetSubMenu = $("#boardDiv");
+
+                comuEl.hover(function () {
+                    if (targetSubMenu.is(":visible")) {
+                        targetSubMenu.slideUp();
                     } else {
-                        hd$(comuEl[i]).next(".liBoard").css("display", "none");
+                        targetSubMenu.slideDown();
                     }
-                }
+                });
             });
 
         </script>

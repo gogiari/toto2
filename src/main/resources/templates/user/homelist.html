@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User List</title>
+    <link rel="shortcut icon" href="/img/favicon.ico" type="image/x-icon">
+    
+    <style>
+        table,th, td {  padding: 0; margin : auto; border: 0px solid black;
+            border-collapse: collapse; font-size: small;}
+
+           table,th,td,tr{
+      border-radius: 3px;
+           }
+        td { width: 120px; height: 5px; text-align: center;}
+        td:last-child { width: 300px; text-align: center;}
+        .user:hover { background-color: rgba(97, 95, 97, 0.533);
+            cursor: pointer;
+            opacity: 0.6;
+            transition: 1s;
+        }
+        tr:first-child {color:#9CC3D5;background-color: #0063B2;}
+        .user:nth-child(2n+1) { background-color: #9CC3D5;}
+
+        body::-webkit-scrollbar{
+  display: none;
+}
+    </style>
+    <script src="https://code.jquery.com/jquery.min.js"></script>
+</head>
+<body>
+    <table>
+        <tr>
+            <th>가입순</th>
+            <th>아이디</th>
+            <th>가입일</th>
+        </tr>
+        <!-- <tr class="user" th:each="user : ${userList}" th:onclick="'location.href=\''+ @{View(userid=${user.userid})} + '\''" > -->
+        <tr class="user" th:each="user : ${userList}">
+            <td class="userIndex" id="userIndex" th:text="${userStat.index+1}"></td>
+            <td th:text="${user.userid}"></td>
+            <td th:text="${user.indate}"></td> 
+        </tr>
+    </table>
+</body>
+<script>
+
+</script>
+</html>
