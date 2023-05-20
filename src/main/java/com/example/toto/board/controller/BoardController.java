@@ -68,6 +68,10 @@ public class BoardController {
     public ModelAndView view(String idx) {
         ModelAndView mv = new ModelAndView("board/view");
         BoardVo boardVo = boardService.getBoard( idx );
+
+        //게시물 조회수증가
+        boardService.incReadcount(idx);
+
         System.out.println("받은보드" + boardVo);
         mv.addObject("boardVo", boardVo);
         return mv;

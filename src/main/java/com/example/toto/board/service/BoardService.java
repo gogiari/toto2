@@ -35,4 +35,8 @@ public class BoardService {
         boardMappber.deleteBoard(idx);
     }
 
+    public void incReadcount(String idx) {
+        boardMappber.incReadcount(idx);
+    }
+
 }

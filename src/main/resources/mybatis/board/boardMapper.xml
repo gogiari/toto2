@@ -84,11 +84,21 @@ ORDER BY
         )
 
     </insert>
+
+    <!-- 게시물 수정 -->
     <update id="updateBoard">
         UPDATE BOARD
         SET   TITLE = #{title},
               CONT  = #{cont}
         WHERE IDX = #{idx}
+    </update>
+
+    <!-- 조회수증가 -->
+
+    <update id="incReadcount">
+        UPDATE BOARD
+        SET READCOUNT = READCOUNT + 1
+        WHERE IDX = #{ idx }
     </update>
 
     <delete id="deleteBoard">

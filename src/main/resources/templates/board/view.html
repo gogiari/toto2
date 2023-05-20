@@ -25,6 +25,9 @@
             background-color: white; border: 2px solid #5d5d5d;
             padding: 30px 20px;
         }
+        #coments_area table,
+        #coments_area td,
+        #coments_area tr { border: 1px solid black;}
     </style>
 
     <div id="wrap">
@@ -55,6 +58,19 @@
             <th:block th:if="${boardVo.menu_id != 'MENU04'}">
                 <input type="button" th:onclick="|location.href='@{List(menu_id=${param.menu_id})}'|" value="목록">
             </th:block>
+            <div id="coments_area" style="border: 1px solid black; width: 100%; height: 100px;">
+                <table>
+                    <tr>
+                        <td>
+                        댓글달기
+                        </td>
+                        <td>
+                            와우
+                        </td>
+                    </tr>
+                </table>
+                
+            </div>
             </div>
         </div>
     </div>
