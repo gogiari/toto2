@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
 import com.example.toto.board.vo.BoardVo;
+import com.example.toto.board.vo.CommentVo;
 
 @Repository
 @Mapper
@@ -22,4 +23,8 @@ public interface BoardMapper {
     void deleteBoard(String idx);
 
     void incReadcount(String idx);
+
+    List<CommentVo> getCommentList(String idx);
+
+    int insertComment(CommentVo commentVo);
 }

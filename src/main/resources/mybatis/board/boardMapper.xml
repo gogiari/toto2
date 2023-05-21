@@ -52,6 +52,23 @@ ORDER BY
 
     </select>
 
+
+    <!-- 댓글리스트 -->
+    <select id="getCommentList"
+        resultType="com.example.toto.board.vo.CommentVo">
+        SELECT
+            CIDX,
+            IDX,
+            CWRITER,
+            COMMENT_TEXT,
+            CINDATE
+        FROM
+            COMMENTS
+        WHERE
+            IDX = #{ idx }
+    
+    </select>
+
     <insert id="insertBoard">
         INSERT INTO BOARD(
             IDX,
@@ -83,6 +100,25 @@ ORDER BY
             0
         )
 
+    </insert>
+
+    <!-- 댓글달기 -->
+    <insert id="insertComment">
+        INSERT INTO COMMENTS(
+            CIDX,
+            IDX,
+            CWRITER,
+            COMMENT_TEXT,
+            CINDATE
+        )
+        VALUES
+        (
+            (SELECT NVL(MAX(CIDX), 0)+1 FROM COMMENTS),
+            #{ idx },
+            #{ cwriter },
+            #{ comment_text },
+            SYSDATE
+        )
     </insert>
 
     <!-- 게시물 수정 -->

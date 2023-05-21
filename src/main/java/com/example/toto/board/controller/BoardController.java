@@ -4,11 +4,13 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.example.toto.board.service.BoardService;
 import com.example.toto.board.vo.BoardVo;
+import com.example.toto.board.vo.CommentVo;
 import com.example.toto.menu.service.MenuService;
 import com.example.toto.menu.vo.MenuVo;
 
@@ -72,8 +74,13 @@ public class BoardController {
         //게시물 조회수증가
         boardService.incReadcount(idx);
 
+        //댓글
+        List<CommentVo> commentList = boardService.getCommentList(idx);
+
         System.out.println("받은보드" + boardVo);
+        System.out.println("받은댓글" + commentList);
         mv.addObject("boardVo", boardVo);
+        mv.addObject("commentList", commentList);
         return mv;
     }
     
@@ -126,6 +133,28 @@ public class BoardController {
         mv.addObject("imageList", imageList);
         mv.addObject("menu", menu);
         //System.out.println("nope" + menuList);
+        return mv;
+    }
+
+    @PostMapping("/Board/WriteComment")
+    public ModelAndView writeComment(CommentVo commentVo) {
+        System.out.println("댓글작성받았나?" + commentVo);
+        ModelAndView mv = new ModelAndView();
+        if(boardService.insertComment(commentVo) == 1){
+            mv.addObject("ressult", "seccess");
+        } else {
+            mv.addObject("result", "fail");
+        }
+        mv.setViewName("jsonView");
+        return mv;
+    }
+
+    @RequestMapping("/Board/CommentList")
+    public ModelAndView commentList(String idx){
+        ModelAndView mv = new ModelAndView();
+        List<CommentVo> commentList = boardService.getCommentList(idx);
+        mv.setViewName("board/commentList");
+        mv.addObject("commentList", commentList);
         return mv;
     }
 

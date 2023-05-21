@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.toto.board.mapper.BoardMapper;
 import com.example.toto.board.vo.BoardVo;
+import com.example.toto.board.vo.CommentVo;
 
 @Service("boardService")
 public class BoardService {
@@ -37,6 +38,16 @@ public class BoardService {
 
     public void incReadcount(String idx) {
         boardMappber.incReadcount(idx);
+    }
+
+    public List<CommentVo> getCommentList(String idx) {
+        List<CommentVo> commentList = boardMappber.getCommentList(idx);
+        return commentList;
+    }
+
+    public int insertComment(CommentVo commentVo) {
+        return boardMappber.insertComment(commentVo);
+        
     }
 
 }

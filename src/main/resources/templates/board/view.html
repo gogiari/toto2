@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title></title>
+    <title th:text="${boardVo.title}"></title>
 </head>
 <body style="display: flex; justify-content: center;">
     <style>
@@ -25,9 +25,20 @@
             background-color: white; border: 2px solid #5d5d5d;
             padding: 30px 20px;
         }
-        #coments_area table,
-        #coments_area td,
-        #coments_area tr { border: 1px solid black;}
+        #comments_area {
+            border: 1px solid black; width: 100%; padding: 5px;
+        }
+        #comments table {
+            width: 100%;
+            border-top: 1px solid black;
+        }
+        
+        #comments_area {}
+        #comment {
+            resize: none;
+            width: 70%;
+            height: 50px;
+        }
     </style>
 
     <div id="wrap">
@@ -58,18 +69,26 @@
             <th:block th:if="${boardVo.menu_id != 'MENU04'}">
                 <input type="button" th:onclick="|location.href='@{List(menu_id=${param.menu_id})}'|" value="목록">
             </th:block>
-            <div id="coments_area" style="border: 1px solid black; width: 100%; height: 100px;">
-                <table>
-                    <tr>
-                        <td>
-                        댓글달기
-                        </td>
-                        <td>
-                            와우
-                        </td>
-                    </tr>
-                </table>
-                
+            <hr>
+            <div id="comments_area">
+                <div style="display: flex; justify-content: center;">
+                    <span style="display: flex; align-items: center; margin-right: 5px;">댓글쓰기</span>
+                    <form id="comment_form">
+                        <textarea name="comment" id="comment" cols="30" rows="10"></textarea>
+                        <th:blcok th:if="${session.user}">
+                            <input hidden type="text" name="cwriter" id="cwriter" th:value="${session.user.username}">
+                        </th:blcok>
+                        <input type="submit" value="작성">
+                    </form>
+                </div>
+                <hr style="width: 90%; margin-top: 30px; margin-bottom: 30px;">
+                <div id="comments">
+                    <table th:each="comm : ${commentList}">
+                        <td th:text="${comm.cwriter}"></td>
+                        <td th:text="${comm.comment_text}"></td>
+                        <td th:text="${comm.cindate}"></td>
+                    </table>
+                </div>                
             </div>
             </div>
         </div>
@@ -87,5 +106,22 @@
             return;
         }
     });
+
+    $('#comment_form').on('submit', function (event) {
+        event.preventDefault();
+        $.ajax({
+            url: '/Board/commentWrite',
+            type: 'POST',
+            data: $('#comment_form').serialize(),
+            success: function () {
+                alert('댓글이 작성되었습니다.');
+                location.reload();
+            },
+            error: function () {
+                alert('댓글 작성에 실패하였습니다.');
+            }
+        });
+    });
+
 </script>
 </html>
