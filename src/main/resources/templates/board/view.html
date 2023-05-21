@@ -74,7 +74,7 @@
                 <div style="display: flex; justify-content: center;">
                     <span style="display: flex; align-items: center; margin-right: 5px;">댓글쓰기</span>
                     <form id="comment_form">
-                        <textarea name="comment" id="comment" cols="30" rows="10"></textarea>
+                        <textarea name="comment_text" id="comment_text" cols="30" rows="10"></textarea>
                         <th:blcok th:if="${session.user}">
                             <input hidden type="text" name="cwriter" id="cwriter" th:value="${session.user.username}">
                         </th:blcok>
@@ -95,33 +95,68 @@
     </div>
 </body>
 <script>
+ // 현재 URL에서 idx 값 추출하는 함수
+ function getIdxFromUrl() {
+            var urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get('idx');
+ }
+
+    // 댓글 제출을 처리하기 위한 Ajax 코드
+    $('#comment_form').submit(function (event) {
+        event.preventDefault(); // 기본 폼 제출 방지
+
+        var commentText = $('#comment_text').val(); // 댓글 텍스트 가져오기
+        var cwriter = $('#cwriter').val(); // 작성자 가져오기
+        let idx = getIdxFromUrl();
+// 댓글을 제출하기 위한 Ajax 요청 보내기
+$.ajax({
+    url: '/Board/WriteComment',
+    type: 'POST',
+    contentType: 'application/json', // 컨텐츠 타입 설정
+    dataType: 'json',
+    data: JSON.stringify({
+        comment_text: commentText,
+        cwriter: cwriter,
+        idx: idx
+    }), // 데이터를 JSON 문자열로 직렬화하여 전송
+    success: function(response) {
+        alert('댓글성공');
+        // 성공적인 응답 처리 (예: 새로운 댓글로 댓글 섹션 업데이트)
+        var newComment = '<table>' +
+            '<td>' + cwriter + '</td>' +
+            '<td>' + commentText + '</td>' +
+            '<td>' + response.cindate + '</td>' +
+            '</table>';
+        $('#comments').append(newComment);
+        $('#comment_text').val(''); // 댓글 텍스트 필드 비우기
+    },
+    error: function(xhr, status, error) {
+        // 에러 응답 처리
+        console.log("ㅅㅂ"+error);
+    }
+});
+
+    });
+
+
+
+
+
+
     let fuck = document.getElementById('hidcont').innerText;
     $('#cont').append(fuck);
-    $('input[value="삭제"]').click(function (){
-        if(confirm('게시글을 정말 삭제하시겠습니까?') == true ) {
+    $('input[value="삭제"]').click(function () {
+        if (confirm('게시글을 정말 삭제하시겠습니까?') == true) {
             alert('게시글을 삭제 하였습니다.');
-            location.href="/Board/Delete?idx=[[${param.idx}]]&menu_id=[[${param.menu_id}]]";
+            location.href = "/Board/Delete?idx=[[${param.idx}]]&menu_id=[[${param.menu_id}]]";
         } else {
             alert('취소 했습니다.');
             return;
         }
     });
 
-    $('#comment_form').on('submit', function (event) {
-        event.preventDefault();
-        $.ajax({
-            url: '/Board/commentWrite',
-            type: 'POST',
-            data: $('#comment_form').serialize(),
-            success: function () {
-                alert('댓글이 작성되었습니다.');
-                location.reload();
-            },
-            error: function () {
-                alert('댓글 작성에 실패하였습니다.');
-            }
-        });
-    });
+
 
 </script>
+
 </html>

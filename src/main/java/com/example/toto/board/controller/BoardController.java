@@ -1,11 +1,19 @@
 package com.example.toto.board.controller;
 
+import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.example.toto.board.service.BoardService;
@@ -135,20 +143,19 @@ public class BoardController {
         //System.out.println("nope" + menuList);
         return mv;
     }
-
-    @PostMapping("/Board/WriteComment")
-    public ModelAndView writeComment(CommentVo commentVo) {
-        System.out.println("댓글작성받았나?" + commentVo);
-        ModelAndView mv = new ModelAndView();
-        if(boardService.insertComment(commentVo) == 1){
-            mv.addObject("ressult", "seccess");
+    @PostMapping(path = "/Board/WriteComment", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> writeComment(@RequestBody CommentVo commentVo) {
+        System.out.println("되라좀"+commentVo); // 매핑된 객체 출력
+        int result = boardService.insertComment(commentVo);
+    
+        if (result == 1) {
+            return ResponseEntity.ok("success");
         } else {
-            mv.addObject("result", "fail");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("fail");
         }
-        mv.setViewName("jsonView");
-        return mv;
     }
 
+    @ResponseBody
     @RequestMapping("/Board/CommentList")
     public ModelAndView commentList(String idx){
         ModelAndView mv = new ModelAndView();

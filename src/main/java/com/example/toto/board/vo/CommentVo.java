@@ -12,8 +12,8 @@ import lombok.ToString;
 @Setter
 @ToString
 public class CommentVo {
-    private int cidx;
-    private int idx;
+    private String cidx;
+    private String idx;
     private String cwriter;
     private String comment_text;
     private String cindate;
