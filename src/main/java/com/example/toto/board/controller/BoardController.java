@@ -158,8 +158,23 @@ public class BoardController {
     @PostMapping("/Board/DeleteComment")
     @ResponseBody
     public Map<String,Object> deleteComment(@RequestBody CommentVo commentVo) {
-        System.out.println("댓글삭제" + commentVo);
+        // System.out.println("댓글삭제" + commentVo);
         int result = boardService.deleteComment(commentVo);
+        Map<String, Object> resultMap = new HashMap<>();
+        if (result > 0) {
+            resultMap.put("result", true);
+        } else {
+            resultMap.put("result", false);
+        }
+
+        return resultMap;
+    }
+
+    @PostMapping("/Board/UpdateComment")
+    @ResponseBody
+    public Map<String,Object> updateComment(@RequestBody CommentVo commentVo) {
+        System.out.println("댓글수정" + commentVo);
+        int result = boardService.updateComment(commentVo);
         Map<String, Object> resultMap = new HashMap<>();
         if (result > 0) {
             resultMap.put("result", true);
