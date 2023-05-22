@@ -1,18 +1,14 @@
 package com.example.toto.board.controller;
 
-import java.util.Calendar;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -34,7 +30,7 @@ public class BoardController {
     public ModelAndView list(String menu_id) {
         ModelAndView mv = new ModelAndView();
 
-        System.out.println("키미노메뉴아디와? " + menu_id);
+        // System.out.println("키미노메뉴아디와? " + menu_id);
 
         // 메뉴
         MenuVo menu = menuService.getMenu(menu_id);
@@ -85,8 +81,8 @@ public class BoardController {
         //댓글
         List<CommentVo> commentList = boardService.getCommentList(idx);
 
-        System.out.println("받은보드" + boardVo);
-        System.out.println("받은댓글" + commentList);
+        // System.out.println("받은보드" + boardVo);
+        // System.out.println("받은댓글" + commentList);
         mv.addObject("boardVo", boardVo);
         mv.addObject("commentList", commentList);
         return mv;
@@ -98,7 +94,7 @@ public class BoardController {
     public ModelAndView updateForm (String idx) {
         ModelAndView mv = new ModelAndView("board/update");
         BoardVo boardVo = boardService.getBoard( idx );
-        System.out.println("가져왓니??" + boardVo);
+        // System.out.println("가져왓니??" + boardVo);
         mv.addObject("boardVo", boardVo);
         return mv;
     }
@@ -114,7 +110,7 @@ public class BoardController {
     // 게시글 삭제 ---------------------------------------------------------------------------
     @RequestMapping("/Board/Delete")
     public ModelAndView delete(String idx, String menu_id) {
-        System.out.println("idx는 뭐고? " + idx);
+        // System.out.println("idx는 뭐고? " + idx);
         ModelAndView mv = new ModelAndView("redirect:/Board/List?menu_id=" + menu_id);
         boardService.deleteBoard(idx);
         return mv;
@@ -143,26 +139,27 @@ public class BoardController {
         //System.out.println("nope" + menuList);
         return mv;
     }
-    @PostMapping(path = "/Board/WriteComment", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> writeComment(@RequestBody CommentVo commentVo) {
-        System.out.println("되라좀"+commentVo); // 매핑된 객체 출력
+
+    @PostMapping(value = "/Board/WriteComment", consumes = "application/json", produces = "application/json")
+    public @ResponseBody CommentVo writeComment(@RequestBody CommentVo commentVo) {
         int result = boardService.insertComment(commentVo);
-    
+        System.out.println("결과" + result);
         if (result == 1) {
-            return ResponseEntity.ok("success");
+            return commentVo;
         } else {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("fail");
+            return null;
         }
     }
 
-    @ResponseBody
+
+
+
     @RequestMapping("/Board/CommentList")
-    public ModelAndView commentList(String idx){
-        ModelAndView mv = new ModelAndView();
+    @ResponseBody
+    public List<CommentVo> getCommentList(String idx) {
         List<CommentVo> commentList = boardService.getCommentList(idx);
-        mv.setViewName("board/commentList");
-        mv.addObject("commentList", commentList);
-        return mv;
+        System.out.println("받았니?" + commentList);
+        return commentList;
     }
 
 }

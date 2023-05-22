@@ -61,11 +61,15 @@ ORDER BY
             IDX,
             CWRITER,
             COMMENT_TEXT,
-            CINDATE
+            CASE
+            WHEN TO_CHAR(CINDATE, 'YYYYMMDD') = TO_CHAR(SYSDATE, 'YYYYMMDD') THEN TO_CHAR(CINDATE, 'HH24:MI')
+            WHEN TO_CHAR(CINDATE, 'YYYY') = TO_CHAR(SYSDATE, 'YYYY') THEN TO_CHAR(CINDATE, 'MM.DD')
+            ELSE TO_CHAR(CINDATE, 'YY.MM.DD') END AS CINDATE
         FROM
             COMMENTS
         WHERE
             IDX = #{ idx }
+        ORDER BY CIDX DESC
     
     </select>
 

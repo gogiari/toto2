@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="ko">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title th:text="${boardVo.title}"></title>
 </head>
+
 <body style="display: flex; justify-content: center;">
     <style>
         #allPage {
@@ -14,27 +16,44 @@
             grid-template-rows: 1000px;
             column-gap: 10px;
         }
+
         .left_side {
             order: 1;
         }
+
         .right_side {
             order: 3;
         }
+
         #contents {
             order: 2;
-            background-color: white; border: 2px solid #5d5d5d;
+            background-color: white;
+            border: 2px solid #5d5d5d;
             padding: 30px 20px;
         }
+
         #comments_area {
-            border: 1px solid black; width: 100%; padding: 5px;
+            border: 1px solid black;
+            width: 100%;
+            padding: 5px;
         }
+
         #comments table {
             width: 100%;
             border-top: 1px solid black;
         }
-        
-        #comments_area {}
-        #comment {
+
+        #comments td:nth-child(1) {
+            width: 100px;
+        }
+
+        #comments td:last-child {
+            width: 150px;
+        }
+
+
+
+        #comment_text {
             resize: none;
             width: 70%;
             height: 50px;
@@ -49,57 +68,92 @@
             <div id="contents" style="overflow-y: scroll;">
                 <h1 id="title" th:text="${boardVo.title}"></h1>
                 <hr>
-            <div id="util_area">
-                <div id="div_left" style="float: left;" th:text="|작성자 : ${boardVo.writer}|"></div>
-                <div id="div_right" style="float: right;" th:text="|작성일 : ${boardVo.regdate}|"></div>
-            </div>
-            <br><hr>
-            <p id="hidcont" hidden th:text="${boardVo.cont}"></p>
-            <div id="cont"></div>
-            <hr><br>
-            <th:block th:if="${session.user}">
-                <th:block th:if="${session.user.username == boardVo.writer or session.user.username == '관리자'}">
-                    <input type="button" th:onclick="|location.href='@{UpdateForm(idx=${param.idx},menu_id=${param.menu_id})}'|" value="수정">
-                    <input type="button" value="삭제">
-                </th:block>
-            </th:block>
-            <th:block  th:if="${boardVo.menu_id == 'MENU04'}">
-                <input type="button" th:onclick="|location.href='@{/ImageBoard/List}'|" value="목록">
-            </th:block>
-            <th:block th:if="${boardVo.menu_id != 'MENU04'}">
-                <input type="button" th:onclick="|location.href='@{List(menu_id=${param.menu_id})}'|" value="목록">
-            </th:block>
-            <hr>
-            <div id="comments_area">
-                <div style="display: flex; justify-content: center;">
-                    <span style="display: flex; align-items: center; margin-right: 5px;">댓글쓰기</span>
-                    <form id="comment_form">
-                        <textarea name="comment_text" id="comment_text" cols="30" rows="10"></textarea>
-                        <th:blcok th:if="${session.user}">
-                            <input hidden type="text" name="cwriter" id="cwriter" th:value="${session.user.username}">
-                        </th:blcok>
-                        <input type="submit" value="작성">
-                    </form>
+                <div id="util_area">
+                    <div id="div_left" style="float: left;" th:text="|작성자 : ${boardVo.writer}|"></div>
+                    <div id="div_right" style="float: right;" th:text="|작성일 : ${boardVo.regdate}|"></div>
                 </div>
-                <hr style="width: 90%; margin-top: 30px; margin-bottom: 30px;">
-                <div id="comments">
-                    <table th:each="comm : ${commentList}">
-                        <td th:text="${comm.cwriter}"></td>
-                        <td th:text="${comm.comment_text}"></td>
-                        <td th:text="${comm.cindate}"></td>
-                    </table>
-                </div>                
-            </div>
+                <br>
+                <hr>
+                <p id="hidcont" hidden th:text="${boardVo.cont}"></p>
+                <div id="cont"></div>
+                <hr><br>
+                <th:block th:if="${session.user}">
+                    <th:block th:if="${session.user.username == boardVo.writer or session.user.username == '관리자'}">
+                        <input type="button"
+                            th:onclick="|location.href='@{UpdateForm(idx=${param.idx},menu_id=${param.menu_id})}'|"
+                            value="수정">
+                        <input type="button" value="삭제">
+                    </th:block>
+                </th:block>
+                <th:block th:if="${boardVo.menu_id == 'MENU04'}">
+                    <input type="button" th:onclick="|location.href='@{/ImageBoard/List}'|" value="목록">
+                </th:block>
+                <th:block th:if="${boardVo.menu_id != 'MENU04'}">
+                    <input type="button" th:onclick="|location.href='@{List(menu_id=${param.menu_id})}'|" value="목록">
+                </th:block>
+                <hr>
+                <div id="comments_area">
+                    <div style="display: flex; justify-content: center;">
+                        <span style="display: flex; align-items: center; margin-right: 5px;">댓글쓰기</span>
+                        <form id="comment_form" action="/Board/WriteComment">
+                            <textarea name="comment_text" id="comment_text" cols="30" rows="10"></textarea>
+                            <th:blcok th:if="${session.user}">
+                                <input hidden type="text" name="cwriter" id="cwriter"
+                                    th:value="${session.user.username}">
+                            </th:blcok>
+                            <input type="submit" value="작성">
+                        </form>
+                    </div>
+                    <hr style="width: 90%; margin-top: 30px; margin-bottom: 30px;">
+                    <div id="comments">
+                        <table th:each="comm : ${commentList}">
+                            <td th:text="${comm.cwriter}"></td>
+                            <td th:text="${comm.comment_text}"></td>
+                            <td th:text="${comm.cindate}"></td>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </body>
 <script>
- // 현재 URL에서 idx 값 추출하는 함수
- function getIdxFromUrl() {
-            var urlParams = new URLSearchParams(window.location.search);
-            return urlParams.get('idx');
- }
+    // 현재 URL에서 idx 값 추출하는 함수
+    if(!'[[${session.user}]]'){
+        alert("로그인안됨");
+    }
+
+    function getIdxFromUrl() {
+        var urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get('idx');
+    }
+
+    
+// 댓글 목록 가져오기
+function refreshComments() {
+    let idx = getIdxFromUrl();
+    $.ajax({
+        url: '/Board/CommentList?idx=' + idx,
+        type: 'GET',
+        dataType: 'json',
+        success: function (comments) {
+            alert("리프레쉬성공");
+            $('#comments').empty();
+            $.each(comments, function (index, comment) {
+                var commentEntry = '<table>' +
+                    '<td>' + comment.cwriter + '</td>' +
+                    '<td>' + comment.comment_text + '</td>' +
+                    '<td>' + comment.cindate + '</td>' +
+                    '</table>';
+                $('#comments').append(commentEntry);
+            });
+        },
+        error: function (xhr, status, error) {
+            console.log('Error:', error);
+            alert("리프레쉬실패");
+        }
+    });
+}
 
     // 댓글 제출을 처리하기 위한 Ajax 코드
     $('#comment_form').submit(function (event) {
@@ -108,33 +162,28 @@
         var commentText = $('#comment_text').val(); // 댓글 텍스트 가져오기
         var cwriter = $('#cwriter').val(); // 작성자 가져오기
         let idx = getIdxFromUrl();
-// 댓글을 제출하기 위한 Ajax 요청 보내기
-$.ajax({
-    url: '/Board/WriteComment',
-    type: 'POST',
-    contentType: 'application/json', // 컨텐츠 타입 설정
-    dataType: 'json',
-    data: JSON.stringify({
-        comment_text: commentText,
-        cwriter: cwriter,
-        idx: idx
-    }), // 데이터를 JSON 문자열로 직렬화하여 전송
-    success: function(response) {
-        alert('댓글성공');
-        // 성공적인 응답 처리 (예: 새로운 댓글로 댓글 섹션 업데이트)
-        var newComment = '<table>' +
-            '<td>' + cwriter + '</td>' +
-            '<td>' + commentText + '</td>' +
-            '<td>' + response.cindate + '</td>' +
-            '</table>';
-        $('#comments').append(newComment);
-        $('#comment_text').val(''); // 댓글 텍스트 필드 비우기
-    },
-    error: function(xhr, status, error) {
-        // 에러 응답 처리
-        console.log("ㅅㅂ"+error);
-    }
-});
+
+        // 댓글을 제출하기 위한 Ajax 요청 보내기
+        $.ajax({
+            url: '/Board/WriteComment',
+            type: 'POST',
+            contentType: 'application/json', // 컨텐츠 타입 설정
+            dataType: 'json',
+            data: JSON.stringify({
+                comment_text: commentText,
+                cwriter: cwriter,
+                idx: idx
+            }), // 데이터를 JSON 문자열로 직렬화하여 전송
+            success: function (response) {
+                alert('댓글성공');
+                refreshComments(); // 댓글 목록 새로고침
+                $('#comment_text').val(''); // 댓글 텍스트 필드 비우기
+            },
+            error: function (xhr, status, error) {
+                // 에러 응답 처리
+                console.log("error = " + error);
+            }
+        });
 
     });
 
