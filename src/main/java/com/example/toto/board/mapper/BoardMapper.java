@@ -29,4 +29,6 @@ public interface BoardMapper {
     int insertComment(CommentVo commentVo);
 
     int deleteComment(CommentVo commentVo);
+
+    int updateComment(CommentVo commentVo);
 }

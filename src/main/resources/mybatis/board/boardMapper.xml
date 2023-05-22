@@ -141,6 +141,12 @@ ORDER BY
         WHERE IDX = #{ idx }
     </update>
 
+    <update id="updateComment">
+        UPDATE COMMENTS
+        SET COMMENT_TEXT = #{ comment_text }
+        WHERE CIDX = #{ cidx }
+    </update>
+
     <delete id="deleteBoard">
         DELETE BOARD WHERE IDX = #{ idx }
     </delete>

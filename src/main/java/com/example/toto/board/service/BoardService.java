@@ -54,4 +54,8 @@ public class BoardService {
         return boardMappber.deleteComment(commentVo);
     }
 
+    public int updateComment(CommentVo commentVo) {
+        return boardMappber.updateComment(commentVo);
+    }
+
 }

@@ -119,12 +119,17 @@
                     <div id="comments">
                         <table th:each="comm : ${commentList}">
                             <td th:text="${comm.cwriter}"></td>
-                            <td th:text="${comm.comment_text}"></td>
+                            <td>
+                                <input hidden class="yeep" th:value="${comm.cidx}">
+                                <span th:name="${comm.cidx}" th:text="${comm.comment_text}"></span>
+                            </td>
                             <td>
                                 <span th:text="${comm.cindate}"></span>
                                 <th:block th:if="${session.user}">
                                     <input th:if="${comm.cwriter == session.user.username}"
-                                        th:onclick="deleteComment([[${comm.cidx}]])" text type="button" value="삭제">
+                                    th:onclick="updateFormComment([[${comm}]])" text type="button" value="수정">
+                                    <input th:if="${comm.cwriter == session.user.username}"
+                                    th:onclick="deleteComment([[${comm.cidx}]])" text type="button" value="삭제">
                                 </th:block>
                             </td>
                         </table>
@@ -221,6 +226,43 @@
             },
             error: function () {
                 alert("댓글 삭제 에러");
+                console(error);
+            }
+
+        })
+    }
+
+    function updateFormComment(comm){
+        let nowcidx = $(`#contents span[name=${comm.cidx}]`);
+        // alert(nowcidx.text());
+        // nowcidx.prop("hidden",true);
+        let tab = nowcidx.parent()
+        nowcidx.empty();
+        let tdpa = nowcidx.parent();
+        latd = tdpa.parent().children().last();
+        latd.empty();
+        tdpa.append(`<input id="setComment" width="100%" type="text" value="">`);
+        let com_text = $('#setComment');
+        latd.append(`<input id="inupcom" type="button" value="수정">`);
+        latd.append(`<input type="button" value="취소">`);
+        $('#inupcom').click(function(){
+            updateCommnet(com_text.val(), comm.cidx);
+        });
+    }
+    function updateCommnet(comment_text, cidx){
+        $.ajax({
+            url: '/Board/UpdateComment',
+            type: 'post',
+            contentType: 'application/json',
+            data: JSON.stringify({
+                cidx: cidx,
+                comment_text: comment_text
+            }),
+            success: function (result) {
+                refreshComments();
+            },
+            error: function () {
+                alert("댓글 수정 에러");
                 console(error);
             }
 
