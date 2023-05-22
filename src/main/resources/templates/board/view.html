@@ -52,11 +52,15 @@
         }
 
 
+        #comment_form {
+            width: 90%;
+            height: 70px;
+        }
 
         #comment_text {
             resize: none;
-            width: 70%;
-            height: 50px;
+            width: 80%;
+            height: 60px;
         }
     </style>
 
@@ -77,23 +81,28 @@
                 <p id="hidcont" hidden th:text="${boardVo.cont}"></p>
                 <div id="cont"></div>
                 <hr><br>
-                <th:block th:if="${session.user}">
-                    <th:block th:if="${session.user.username == boardVo.writer or session.user.username == '관리자'}">
-                        <input type="button"
-                            th:onclick="|location.href='@{UpdateForm(idx=${param.idx},menu_id=${param.menu_id})}'|"
-                            value="수정">
-                        <input type="button" value="삭제">
+                <div id="board_set" style="text-align: right; margin: 10px 0;">
+                    <th:block th:if="${session.user}">
+                        <th:block th:if="${session.user.username == boardVo.writer or session.user.username == '관리자'}">
+                            <input type="button"
+                                th:onclick="|location.href='@{UpdateForm(idx=${param.idx},menu_id=${param.menu_id})}'|"
+                                value="수정">
+                            <input type="button" value="삭제">
+                        </th:block>
                     </th:block>
-                </th:block>
-                <th:block th:if="${boardVo.menu_id == 'MENU04'}">
-                    <input type="button" th:onclick="|location.href='@{/ImageBoard/List}'|" value="목록">
-                </th:block>
-                <th:block th:if="${boardVo.menu_id != 'MENU04'}">
-                    <input type="button" th:onclick="|location.href='@{List(menu_id=${param.menu_id})}'|" value="목록">
-                </th:block>
-                <hr>
+                    <th:block th:if="${boardVo.menu_id == 'MENU04'}">
+                        <input type="button" th:onclick="|location.href='@{/ImageBoard/List}'|" value="목록">
+                    </th:block>
+                    <th:block th:if="${boardVo.menu_id != 'MENU04'}">
+                        <input type="button" th:onclick="|location.href='@{List(menu_id=${param.menu_id})}'|"
+                            value="목록">
+                    </th:block>
+                </div>
+                <div>
+                    <i class='bx bxs-message-rounded-dots'></i><span th:text="${commentList.size}"></span>
+                </div>
                 <div id="comments_area">
-                    <div style="display: flex; justify-content: center;">
+                    <div th:if="${session.user}" style="display: flex; justify-content: center;">
                         <span style="display: flex; align-items: center; margin-right: 5px;">댓글쓰기</span>
                         <form id="comment_form" action="/Board/WriteComment">
                             <textarea name="comment_text" id="comment_text" cols="30" rows="10"></textarea>
@@ -104,12 +113,20 @@
                             <input type="submit" value="작성">
                         </form>
                     </div>
-                    <hr style="width: 90%; margin-top: 30px; margin-bottom: 30px;">
+                    <p style="text-align: center;" th:unless="${session.user}">로그인후 댓글 작성이 가능합니다.<a
+                            href="/loginpage">(로그인 바로가기)</a></p>
+                    <br><br>
                     <div id="comments">
                         <table th:each="comm : ${commentList}">
                             <td th:text="${comm.cwriter}"></td>
                             <td th:text="${comm.comment_text}"></td>
-                            <td th:text="${comm.cindate}"></td>
+                            <td>
+                                <span th:text="${comm.cindate}"></span>
+                                <th:block th:if="${session.user}">
+                                    <input th:if="${comm.cwriter == session.user.username}"
+                                        th:onclick="deleteComment([[${comm.cidx}]])" text type="button" value="삭제">
+                                </th:block>
+                            </td>
                         </table>
                     </div>
                 </div>
@@ -118,42 +135,44 @@
     </div>
 </body>
 <script>
+    // if(!'[[${session.user}]]'){
+    //     alert("로그인안됨");
+    // }
     // 현재 URL에서 idx 값 추출하는 함수
-    if(!'[[${session.user}]]'){
-        alert("로그인안됨");
-    }
 
     function getIdxFromUrl() {
         var urlParams = new URLSearchParams(window.location.search);
         return urlParams.get('idx');
     }
-
-    
-// 댓글 목록 가져오기
-function refreshComments() {
     let idx = getIdxFromUrl();
-    $.ajax({
-        url: '/Board/CommentList?idx=' + idx,
-        type: 'GET',
-        dataType: 'json',
-        success: function (comments) {
-            alert("리프레쉬성공");
-            $('#comments').empty();
-            $.each(comments, function (index, comment) {
-                var commentEntry = '<table>' +
-                    '<td>' + comment.cwriter + '</td>' +
-                    '<td>' + comment.comment_text + '</td>' +
-                    '<td>' + comment.cindate + '</td>' +
-                    '</table>';
-                $('#comments').append(commentEntry);
-            });
-        },
-        error: function (xhr, status, error) {
-            console.log('Error:', error);
-            alert("리프레쉬실패");
-        }
-    });
-}
+
+
+    // 댓글 목록 가져오기
+    function refreshComments() {
+        $.ajax({
+            url: '/Board/CommentList?idx=' + idx,
+            type: 'GET',
+            dataType: 'json',
+            success: function (comments) {
+                // alert("리프레쉬성공");
+                $('#comments').empty();
+                $.each(comments, function (index, comment) {
+                    var commentEntry = '<table>' +
+                        '<td>' + comment.cwriter + '</td>' +
+                        '<td>' + comment.comment_text + '</td>' +
+                        '<td>' + '<span>' + comment.cindate + ' </span>';
+                    commentEntry += `<input onclick="deleteComment(${comment.cidx})" text="" type="button" value="삭제">`
+                    commentEntry += '</td></table>';
+                    $('#comments').append(commentEntry);
+                });
+            },
+            error: function (xhr, status, error) {
+                console.log('Error:', error);
+                // alert("리프레쉬실패");
+                alert("오류로 인해 목록을 다시 가져오지못했습니다.")
+            }
+        });
+    }
 
     // 댓글 제출을 처리하기 위한 Ajax 코드
     $('#comment_form').submit(function (event) {
@@ -161,7 +180,7 @@ function refreshComments() {
 
         var commentText = $('#comment_text').val(); // 댓글 텍스트 가져오기
         var cwriter = $('#cwriter').val(); // 작성자 가져오기
-        let idx = getIdxFromUrl();
+        // let idx = getIdxFromUrl();
 
         // 댓글을 제출하기 위한 Ajax 요청 보내기
         $.ajax({
@@ -175,7 +194,7 @@ function refreshComments() {
                 idx: idx
             }), // 데이터를 JSON 문자열로 직렬화하여 전송
             success: function (response) {
-                alert('댓글성공');
+                // alert('댓글성공');
                 refreshComments(); // 댓글 목록 새로고침
                 $('#comment_text').val(''); // 댓글 텍스트 필드 비우기
             },
@@ -187,6 +206,27 @@ function refreshComments() {
 
     });
 
+    function deleteComment(cidx) {
+        // alert(cidx);
+        $.ajax({
+            url: '/Board/DeleteComment',
+            type: 'post',
+            contentType: 'application/json',
+            data: JSON.stringify({
+                cidx: cidx,
+                idx: idx
+            }),
+            success: function (result) {
+                refreshComments();
+            },
+            error: function () {
+                alert("댓글 삭제 에러");
+                console(error);
+            }
+
+        })
+    }
+
 
 
 
@@ -194,7 +234,7 @@ function refreshComments() {
 
     let fuck = document.getElementById('hidcont').innerText;
     $('#cont').append(fuck);
-    $('input[value="삭제"]').click(function () {
+    $('#board_set input[value="삭제"]').click(function () {
         if (confirm('게시글을 정말 삭제하시겠습니까?') == true) {
             alert('게시글을 삭제 하였습니다.');
             location.href = "/Board/Delete?idx=[[${param.idx}]]&menu_id=[[${param.menu_id}]]";
@@ -203,6 +243,8 @@ function refreshComments() {
             return;
         }
     });
+
+
 
 
 

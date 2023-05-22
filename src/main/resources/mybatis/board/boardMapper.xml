@@ -144,4 +144,8 @@ ORDER BY
     <delete id="deleteBoard">
         DELETE BOARD WHERE IDX = #{ idx }
     </delete>
+
+    <delete id="deleteComment">
+        DELETE COMMENTS WHERE IDX = #{ idx } AND CIDX = #{ cidx }
+    </delete>
 </mapper>

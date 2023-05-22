@@ -27,4 +27,6 @@ public interface BoardMapper {
     List<CommentVo> getCommentList(String idx);
 
     int insertComment(CommentVo commentVo);
+
+    int deleteComment(CommentVo commentVo);
 }
