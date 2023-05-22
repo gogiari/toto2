@@ -16,8 +16,9 @@
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
     <title>글쓰기</title>
     <script>
+        
         if (!'[[${session.user}]]') {
-            alert("로그인 세션이 만료되어 홈으로 돌아갑니다.");
+            alert("로그아웃이 되어 홈으로 돌아갑니다.");
             window.location.href = "/home";
         }
         // 툴바생략
@@ -137,7 +138,13 @@
                         </tr>
                         <tr id="conttr">
                             <td><b>내용<b></td>
-                            <td><textarea id="textar" name="cont"></textarea></td>
+                            <td>
+                                <textarea id="textar" name="cont"></textarea>
+                                <th:block th:if="${boardVo.menu_id == 'MENU03'}">
+                                    <p>최대 100MB</p>
+                                    <input type="file" class="upfile" name="upfile" >
+                                </th:block>
+                            </td>
                         </tr>
                         <tr hidden>
                             <td colspan="2">

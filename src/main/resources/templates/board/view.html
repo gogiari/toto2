@@ -141,12 +141,11 @@
             </div>
         </div>
     </div>
+    <th:block th:if="${session.user}">
+        <p id="getlogid" hidden th:text="${session.user.username}"></p>
+    </th:block>
 </body>
 <script>
-    if('[[${session.user}]]'){
-        
-        
-    }
     // 현재 URL에서 idx 값 추출하는 함수
 
     function getIdxFromUrl() {
@@ -158,10 +157,7 @@
 
     // 댓글 목록 가져오기
     function refreshComments() {
-        if(!'[[${session.user}]]'){
-            alert('와사');
-            let logname = '[[${session.user.username}]]';
-        }
+        let logname = '';
         $.ajax({
             url: '/Board/CommentList?idx=' + idx,
             type: 'GET',
@@ -176,10 +172,12 @@
                             '<input hidden class="yeep" value="'+ comment.cidx +'">' 
                             + '<span name="' + comment.cidx + '">' + comment.comment_text + '</span>' + '</td>' +
                         '<td>' + '<span>' + comment.cindate + ' </span>';
-                            // alert(comment.cwriter);
-                            if(logname == comment.cwriter){
-                                commentEntry += `<input onclick="updateFormComment(${String(comment.cidx)})" text="" type="button" value="수정">`
-                                commentEntry += `<input onclick="deleteComment(${String(comment.cidx)})" text="" type="button" value="삭제">`
+                            if('[[${session.user}]]'){
+                                logname = $('#getlogid').text();
+                                if(logname == comment.cwriter){
+                                    commentEntry += `<input onclick="updateFormComment(${String(comment.cidx)})" text="" type="button" value="수정">`
+                                    commentEntry += `<input onclick="deleteComment(${String(comment.cidx)})" text="" type="button" value="삭제">`
+                                }
                             }
                     commentEntry += '</td></table>';
                     $('#comments').append(commentEntry);
