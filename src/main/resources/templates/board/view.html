@@ -62,6 +62,9 @@
             width: 80%;
             height: 60px;
         }
+        #comments input[value="수정"] {
+            margin-right: 5px;
+        }
     </style>
 
     <div id="wrap">
@@ -127,7 +130,7 @@
                                 <span th:text="${comm.cindate}"></span>
                                 <th:block th:if="${session.user}">
                                     <input th:if="${comm.cwriter == session.user.username}"
-                                    th:onclick="updateFormComment([[${comm}]])" text type="button" value="수정">
+                                    th:onclick="updateFormComment([[${comm.cidx}]])" text type="button" value="수정">
                                     <input th:if="${comm.cwriter == session.user.username}"
                                     th:onclick="deleteComment([[${comm.cidx}]])" text type="button" value="삭제">
                                 </th:block>
@@ -140,9 +143,10 @@
     </div>
 </body>
 <script>
-    // if(!'[[${session.user}]]'){
-    //     alert("로그인안됨");
-    // }
+    if('[[${session.user}]]'){
+        
+        
+    }
     // 현재 URL에서 idx 값 추출하는 함수
 
     function getIdxFromUrl() {
@@ -154,6 +158,10 @@
 
     // 댓글 목록 가져오기
     function refreshComments() {
+        if(!'[[${session.user}]]'){
+            alert('와사');
+            let logname = '[[${session.user.username}]]';
+        }
         $.ajax({
             url: '/Board/CommentList?idx=' + idx,
             type: 'GET',
@@ -164,9 +172,15 @@
                 $.each(comments, function (index, comment) {
                     var commentEntry = '<table>' +
                         '<td>' + comment.cwriter + '</td>' +
-                        '<td>' + comment.comment_text + '</td>' +
+                        '<td>' +
+                            '<input hidden class="yeep" value="'+ comment.cidx +'">' 
+                            + '<span name="' + comment.cidx + '">' + comment.comment_text + '</span>' + '</td>' +
                         '<td>' + '<span>' + comment.cindate + ' </span>';
-                    commentEntry += `<input onclick="deleteComment(${comment.cidx})" text="" type="button" value="삭제">`
+                            // alert(comment.cwriter);
+                            if(logname == comment.cwriter){
+                                commentEntry += `<input onclick="updateFormComment(${String(comment.cidx)})" text="" type="button" value="수정">`
+                                commentEntry += `<input onclick="deleteComment(${String(comment.cidx)})" text="" type="button" value="삭제">`
+                            }
                     commentEntry += '</td></table>';
                     $('#comments').append(commentEntry);
                 });
@@ -184,6 +198,10 @@
         event.preventDefault(); // 기본 폼 제출 방지
 
         var commentText = $('#comment_text').val(); // 댓글 텍스트 가져오기
+        if(commentText == null || commentText.trim() == ''){
+            alert("댓글에 입력된 값이 없습니다.");
+            return
+        }
         var cwriter = $('#cwriter').val(); // 작성자 가져오기
         // let idx = getIdxFromUrl();
 
@@ -232,8 +250,11 @@
         })
     }
 
-    function updateFormComment(comm){
-        let nowcidx = $(`#contents span[name=${comm.cidx}]`);
+    function updateFormComment(cidx){
+        // alert(typeof cidx);
+        let fcidx = String(cidx);
+        let nowcidx = $(`#contents span[name=${fcidx}]`);
+        // alert(fcidx+"누고");
         // alert(nowcidx.text());
         // nowcidx.prop("hidden",true);
         let tab = nowcidx.parent()
@@ -246,10 +267,15 @@
         latd.append(`<input id="inupcom" type="button" value="수정">`);
         latd.append(`<input type="button" value="취소">`);
         $('#inupcom').click(function(){
-            updateCommnet(com_text.val(), comm.cidx);
+            if(com_text.val() == null || com_text.val().trim() == ''){
+                alert("댓글에 입력된 값이 없습니다.")
+                return
+            } 
+            updateCommnet(com_text.val(), fcidx);
         });
     }
     function updateCommnet(comment_text, cidx){
+        // alert(cidx+"가왓나");
         $.ajax({
             url: '/Board/UpdateComment',
             type: 'post',
