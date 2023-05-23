@@ -25,14 +25,14 @@
                         </th:block>
                         <th:blcok th:if="${session.user == null}">
                         <section class="login-form">
-                            <form action="">
+                            <form action="/loginthe" method="post">
                                 <div class="int-area">
                                     <h1 class="logf">LOGIN</h1>
-                                    <input type="text" name="id" id="id" autocomplete="off" required>
+                                    <input type="text" name="userid" id="id" autocomplete="off" required>
                                     <br><label for="id">USER NAME</label>
                                 </div>
                                 <div class="int-area">
-                                    <input type="password" name="pw" id="pw" autocomplete="off" required>
+                                    <input type="password" name="passwd" id="pw" autocomplete="off" required>
                                     <br><label for="pw">PASSWORD</label>
                                 </div>
                                 <div class="btn-area" style="padding-bottom: 10px;">
