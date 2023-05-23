@@ -15,6 +15,15 @@
             <div id="lsidebar">
                 <div id="lsidebar1">
                     <div class="hlog">
+                        <th:block th:if="${session.user}">
+                            <div style="height: 250px;">
+                                <div style="height: 70%; display: flex; align-items: center; justify-content: center;">
+                                    <p style="font-weight: bold;" th:text="|${session.user.username}님 반갑습니다.|"></p>
+                                </div>
+                                <a href="/logout">로그아웃하기</a>
+                            </div>
+                        </th:block>
+                        <th:blcok th:if="${session.user == null}">
                         <section class="login-form">
                             <form action="">
                                 <div class="int-area">
@@ -38,6 +47,7 @@
                                 <a href="">Create An Account!</a>
                             </div>
                         </section>
+                    </th:blcok>
                     </div>
                 </div>
                 <div id="lsidebar2">
