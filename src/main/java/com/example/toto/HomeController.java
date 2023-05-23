@@ -49,7 +49,7 @@ public class HomeController {
         UserVo user = userService.getUserLog(map);
         // UserVo user = userService.getUser( map.get("userid") );
 
-        System.out.println("유저:" + user);
+        // System.out.println("유저:" + user);
         if (user != null) {
             session.setAttribute("user", user);
             mv.setViewName("redirect:/home");

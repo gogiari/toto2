@@ -1,6 +1,9 @@
 package com.example.toto.board.service;
 
+import java.util.HashMap;
 import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,8 +22,8 @@ public class BoardService {
         return boardList;
     }
 
-    public void insertBoard(BoardVo boardVo) {
-        boardMappber.insertBoard(boardVo);
+    public void insertBoard(HashMap<String, Object> map) {
+        boardMappber.insertBoard(map);
     }
 
     public BoardVo getBoard(String idx) {
@@ -56,6 +59,10 @@ public class BoardService {
 
     public int updateComment(CommentVo commentVo) {
         return boardMappber.updateComment(commentVo);
+    }
+
+    public void insertPdsBoard(HashMap<String, Object> map, HttpServletRequest request) {
+        boardMappber.insertPdsBoard(map, request);
     }
 
 }

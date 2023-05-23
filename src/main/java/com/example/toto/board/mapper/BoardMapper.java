@@ -1,6 +1,9 @@
 package com.example.toto.board.mapper;
 
+import java.util.HashMap;
 import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
@@ -14,7 +17,7 @@ public interface BoardMapper {
 
     List<BoardVo> getBoardList(String menu_id);
 
-    void insertBoard(BoardVo boardVo);
+    void insertBoard(HashMap<String, Object> map);
 
     BoardVo getBoard(String idx);
 
@@ -31,4 +34,6 @@ public interface BoardMapper {
     int deleteComment(CommentVo commentVo);
 
     int updateComment(CommentVo commentVo);
+
+    void insertPdsBoard(HashMap<String, Object> map, HttpServletRequest request);
 }

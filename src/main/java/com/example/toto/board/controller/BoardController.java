@@ -4,11 +4,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -54,16 +57,27 @@ public class BoardController {
     }
 
     @RequestMapping("/Board/Write")
-    public ModelAndView write(BoardVo boardVo) {
+    public ModelAndView write(
+        @RequestParam HashMap<String, Object> map,
+        HttpServletRequest request
+            ) {
+
+        String menu_id = (String) map.get("menu_id");
+        System.out.println("맵" + map);
+        System.out.println("리퀘" + request);
         ModelAndView mv = new ModelAndView();
-        if (boardVo.getMenu_id().equals("MENU04")) {
+        if (menu_id.equals("MENU04")) {
             mv.setViewName("redirect:/ImageBoard/List");
         } else {
-            mv.setViewName("redirect:/Board/List?menu_id=" + boardVo.getMenu_id());
+            mv.setViewName("redirect:/Board/List?menu_id=" + menu_id);
         }
 
         // 게시글 등록
-        boardService.insertBoard(boardVo);
+        if (menu_id.equals("MENU03")) {
+            boardService.insertPdsBoard(map, request);
+        } else {
+            boardService.insertBoard(map);
+        }
 
         return mv;
     }
@@ -157,7 +171,7 @@ public class BoardController {
 
     @PostMapping("/Board/DeleteComment")
     @ResponseBody
-    public Map<String,Object> deleteComment(@RequestBody CommentVo commentVo) {
+    public Map<String, Object> deleteComment(@RequestBody CommentVo commentVo) {
         // System.out.println("댓글삭제" + commentVo);
         int result = boardService.deleteComment(commentVo);
         Map<String, Object> resultMap = new HashMap<>();
@@ -172,7 +186,7 @@ public class BoardController {
 
     @PostMapping("/Board/UpdateComment")
     @ResponseBody
-    public Map<String,Object> updateComment(@RequestBody CommentVo commentVo) {
+    public Map<String, Object> updateComment(@RequestBody CommentVo commentVo) {
         System.out.println("댓글수정" + commentVo);
         int result = boardService.updateComment(commentVo);
         Map<String, Object> resultMap = new HashMap<>();

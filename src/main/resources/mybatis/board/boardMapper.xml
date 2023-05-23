@@ -105,6 +105,9 @@ ORDER BY
         )
 
     </insert>
+    <insert id="insertPdsBoard">
+        
+    </insert>
 
     <!-- 댓글달기 -->
     <insert id="insertComment">
