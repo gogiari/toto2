@@ -65,7 +65,12 @@
                         </tr>
                         <tr class="board" th:each="board : ${boardList}" th:onclick="|location.href='@{View(idx=${board.idx},menu_id=${param.menu_id})}'|">
                             <td style="text-align: center;" th:text="${ board.idx }"></td>
-                            <td style="padding-left: 10px;" th:text="${ board.title }"></td>
+                            <!-- <td style="padding-left: 10px;" th:text="${ board.title }"></td> -->
+                            <td>
+                                <span style="padding-left: 10px;" th:text="${ board.title }"></span>
+                                <i class="bx bxs-message-rounded-dots"></i>
+                                <span th:text="${board.ccnt}"></span>
+                            </td>
                             <td style="text-align: center;" th:text="${ board.writer }"></td>
                             <td style="text-align: center;" th:text="${ board.regdate }"></td>
                             <td style="text-align: center;" th:text="${ board.readcount }"></td>

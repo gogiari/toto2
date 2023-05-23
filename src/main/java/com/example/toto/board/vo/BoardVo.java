@@ -26,4 +26,5 @@ public class BoardVo {
     private String delnum;
     private String parent;
     private String menu_name;
+    private String ccnt;
 }
