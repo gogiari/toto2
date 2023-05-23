@@ -25,6 +25,17 @@ public class BoardVo {
     private String nref;
     private String delnum;
     private String parent;
+
     private String menu_name;
+
+    //댓글갯수
     private String ccnt;
+
+    //페이징
+    private int nowpage;
+    private int pagecount;
+    private int startnum;
+    private int endnum;
+
+    private int totalcount;
 }

@@ -1,9 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.toto.board.mapper.BoardMapper">
+    <select id="getTotalCount"
+        parameterType="hashmap"
+        resultType="int">
+    SELECT COUNT( IDX ) AS TOTALCOUNT
+    FROM BOARD
+    <if test="menu_id != null and menu_id != ''"> 
+    WHERE MENU_ID = #{ menu_id }
+    </if>
+
+    </select>
+
+
     <select id="getBoardList"
             resultType="com.example.toto.board.vo.BoardVo">
-    SELECT
+
+                SELECT
     B.IDX,
     B.MENU_ID,
     TITLE,
@@ -28,6 +41,46 @@ WHERE
     B.MENU_ID = #{menu_id}
 ORDER BY
     B.IDX DESC
+            
+            <!-- 부등호 오류 <![CDATA[ ] -->
+            <!-- 잠시만 안녕~
+            <![CDATA[ 
+SELECT *
+FROM (
+SELECT ROWNUM AS RNUM, BB.*
+    FROM (
+         SELECT
+    B.IDX,
+    B.MENU_ID,
+    TITLE,
+    CONT,
+    WRITER,
+    CASE
+    WHEN TO_CHAR(REGDATE, 'YYYYMMDD') = TO_CHAR(SYSDATE, 'YYYYMMDD') THEN TO_CHAR(REGDATE, 'HH24:MI')
+    WHEN TO_CHAR(REGDATE, 'YYYY') = TO_CHAR(SYSDATE, 'YYYY') THEN TO_CHAR(REGDATE, 'MM.DD')
+    ELSE TO_CHAR(REGDATE, 'YY.MM.DD') END AS REGDATE,
+    READCOUNT,
+    BNUM,
+    LVL,
+    STEP,
+    NREF,
+    DELNUM,
+    PARENT,
+    M.MENU_NAME,
+    (SELECT COUNT(*) FROM COMMENTS WHERE IDX = B.IDX) CCNT
+FROM
+    BOARD B LEFT JOIN MENUS M ON B.MENU_ID = M.MENU_ID
+WHERE
+    B.MENU_ID = #{ menu_id}
+ORDER BY
+    B.IDX DESC
+        ) BB
+)
+WHERE RNUM > #{ startnum } - 1
+AND RNUM <= #{ endnum }
+            ]]>
+            -->
+            
     </select>
 
     <select id="getBoard"

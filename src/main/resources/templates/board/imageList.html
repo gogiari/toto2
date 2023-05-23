@@ -30,12 +30,22 @@
             background-color: white;
             border: 2px solid #5d5d5d;
             padding: 30px 20px;
+            height: 936px;
         }
 
         .imgList:hover {
             cursor: pointer;
             transition: 0.2s ease-out;
             opacity: 0.5;
+        }
+
+        .pagingLi {
+            width: 25px;
+            height: 25px;
+            float: left;
+            background-color: #5d5d5d;
+            color: white;
+            margin: 0 1px;
         }
     </style>
 
@@ -46,42 +56,52 @@
             <div id="right_side" th:replace="~{/fragments/right_side :: rightFragment}"></div>
             <div id="contents">
                 <h2 style="text-align: center;margin: 10px 0 10px 0;">갤러리</h2>
-            <hr style="margin-bottom: 10px;">
-            <th:block th:if="${session.user}">
-                <span th:if="${session.user.userid == 'admin'}">관리자만보임 : 반드시 게시판이름이 "갤러리"이여야함</span>
-            </th:block>
-            <th:block th:if="${session.user}">
-                <button style="float: right;"
-                    th:onclick="|location.href='@{/Board/WriteForm(menu_id=MENU04)}'|">글쓰기</button>
-            </th:block>
-            <th:block th:if="${session.user == null}">
-                <div style="float: right;"><span>로그인을 하셔야 글쓰기가 가능합니다</span><button
-                        th:onclick="|location.href='@{/loginpage}'|">로그인</button></div>
-            </th:block>
-            <br>
-            <div style="padding: 10px 0 0 13px;">
-                <div class="imgList" th:each="imgList : ${imageList}"
-                    th:onclick="|location.href='@{/Board/View(menu_id=${imgList.menu_id},idx=${imgList.idx})}'|"
-                    style="padding: 5px;border: 1px solid black;width: 210px; height: 220px;float: left; margin: 10px 5px 10px 5px;">
-                    <div class="hididximg" hidden></div>
-                    <div class="idximg"
-                        style="display: flex; justify-content: center; align-items: center; width: 100%; height: 150px; background-color: #ebebeb;">
+                <hr style="margin-bottom: 10px;">
+                <th:block th:if="${session.user}">
+                    <span th:if="${session.user.userid == 'admin'}">관리자만보임 : 반드시 게시판이름이 "갤러리"이여야함</span>
+                </th:block>
+                <th:block th:if="${session.user}">
+                    <button style="float: right;"
+                        th:onclick="|location.href='@{/Board/WriteForm(menu_id=MENU04)}'|">글쓰기</button>
+                </th:block>
+                <th:block th:if="${session.user == null}">
+                    <div style="float: right;"><span>로그인을 하셔야 글쓰기가 가능합니다</span><button
+                            th:onclick="|location.href='@{/loginpage}'|">로그인</button></div>
+                </th:block>
+                <br>
+                <div style="padding: 10px 0 0 13px;">
+                    <div class="imgList" th:each="imgList : ${imageList}"
+                        th:onclick="|location.href='@{/Board/View(menu_id=${imgList.menu_id},idx=${imgList.idx})}'|"
+                        style="padding: 5px;border: 1px solid black;width: 210px; height: 220px;float: left; margin: 10px 5px 10px 5px;">
+                        <div class="hididximg" hidden></div>
+                        <div class="idximg"
+                            style="display: flex; justify-content: center; align-items: center; width: 100%; height: 150px; background-color: #ebebeb;">
+                        </div>
+                        <p style="font-weight: bold; text-align: center;" th:text="${imgList.title}"></p>
+                        <div style="margin-top: 10px;">
+                            <i class='bx bx-edit-alt'></i>
+                            <span th:text="${imgList.writer}"></span>
+                            <span style="float: right;" th:text="${imgList.ccnt}"></span>
+                            <i style="float: right;" class="bx bxs-message-rounded-dots"></i>
+                            <span style="float: right; margin-right: 5px;" th:text="${imgList.readcount}"></span>
+                            <i style="float: right;" class='bx bx-show-alt bx-tada'></i>
+                            <span hidden class="hidcont" style="float: right;" th:text="${imgList.cont}"></span>
+                        </div>
                     </div>
-                    <p style="font-weight: bold; text-align: center;" th:text="${imgList.title}"></p>
-                    <div style="margin-top: 10px;">
-                        <i class='bx bx-edit-alt'></i>
-                        <span th:text="${imgList.writer}"></span>
-                        <span style="float: right;" th:text="${imgList.ccnt}"></span>
-                        <i style="float: right;" class="bx bxs-message-rounded-dots"></i>
-                        <span style="float: right; margin-right: 5px;" th:text="${imgList.readcount}"></span>
-                        <i style="float: right;" class='bx bx-show-alt bx-tada'></i>
-                        <span hidden class="hidcont" style="float: right;" th:text="${imgList.cont}"></span>
+                </div>
+                <div style="height: 90%;">
+                    <div style="text-align: center; padding-top: 85%;">
+                        <ul style="list-style: none;">
+                            <li class="pagingLi">&lt;&lt;</li>
+                            <li class="pagingLi">&lt;</li>
+                            <li class="pagingLi">&gt;</li>
+                            <li class="pagingLi">&gt;&gt;</li>
+                        </ul>
                     </div>
                 </div>
             </div>
         </div>
-            </div>
-        </div>
+    </div>
     </div>
 </body>
 <script>
