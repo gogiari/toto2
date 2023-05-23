@@ -6,8 +6,8 @@
     font-family:Arial;
   }
   #container{
-    width:280px;
-    height:500px;
+    width:395px;
+    height:700px;
     background:#eff3f7;
     margin:0 auto;
     font-size:0;
@@ -23,8 +23,8 @@
     vertical-align:top;
   }
   main{
-    width:490px;
-    height:800px;
+    width:720px;
+    height:700px;
     display:inline-block;
     font-size:10px;
     vertical-align:top;
@@ -139,15 +139,15 @@
   #chat{
     padding-left:0;
     margin:0;
-    width: 300px;
+    width: 395px;
     list-style-type:none;
     overflow-y:scroll;
-    height:435px;
+    height: 630px;
     border-top:2px solid #fff;
     border-bottom:2px solid #fff;
   }
   #chat li{
-    padding:5px 30px;
+    padding:5px;
   }
   #chat h2,#chat h3{
     display:inline-block;

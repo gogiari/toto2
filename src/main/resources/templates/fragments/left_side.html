@@ -44,11 +44,11 @@
                     <!-- <iframe width="280" height="500" frameborder=0 framespacing=0 marginheight=0 marginwidth=0
                         scrolling=yes vspace=0 src="http://192.168.0.197:8083/chat/JeaDragon"></iframe> -->
                             <div th:if="${session.user}">
-                                <iframe width="280" height="500" frameborder=0 framespacing=0 marginheight=0 marginwidth=0
+                                <iframe width=100% height=700px frameborder=0 framespacing=0 marginheight=0 marginwidth=0
                                     scrolling=yes vspace=0 th:src="@{'http://192.168.0.197:8084/chat/' + ${session.user.username}}"></iframe>
                             </div>
                             <div th:if="${session.user == null}">
-                                <iframe width="280" height="500" frameborder=0 framespacing=0 marginheight=0 marginwidth=0
+                                <iframe width=100% height=700px frameborder=0 framespacing=0 marginheight=0 marginwidth=0
                                     scrolling=yes vspace=0 src="http://192.168.0.197:8084/chat/Guest"></iframe>
                             </div>
                             
