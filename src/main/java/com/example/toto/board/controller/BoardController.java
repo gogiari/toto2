@@ -30,17 +30,40 @@ public class BoardController {
     private MenuService menuService;
 
     @RequestMapping("/Board/List")
-    public ModelAndView list(String menu_id) {
+    public ModelAndView list(
+        @RequestParam HashMap<String, Object> map
+    ) {
         ModelAndView mv = new ModelAndView();
 
         // System.out.println("키미노메뉴아디와? " + menu_id);
 
+         // 총 글수
+         int totalcount = boardService.getTotalCount(map);
+        
+         // 페이징
+         int pagecount = 8;  //페이지당 출력할 갯수
+         int totalpagecount = totalcount % pagecount == 0 ? totalcount / pagecount : totalcount / pagecount + 1;
+         System.out.println("why?" + totalpagecount);
+        
+         int nowpage = Integer.parseInt((String)map.get("nowpage"));
+        int startnum = (nowpage - 1) * pagecount + 1;
+        int endnum = nowpage * pagecount;
+        
+        map.put("pagecount", pagecount);
+        map.put("nowpage", nowpage);
+        map.put("startnum", startnum);
+        map.put("endnum", endnum);
+         
+
         // 메뉴
+        String menu_id = (String) map.get("menu_id");
+
         MenuVo menu = menuService.getMenu(menu_id);
 
         // BoardList - 게시글 목록
-        List<BoardVo> boardList = boardService.getBoardList(menu_id);
+        List<BoardVo> boardList = boardService.getBoardList(map);
 
+        mv.addObject("totalpagecount", totalpagecount);
         mv.setViewName("board/list");
         mv.addObject("boardList", boardList);
         mv.addObject("menu", menu);
@@ -63,13 +86,15 @@ public class BoardController {
             ) {
 
         String menu_id = (String) map.get("menu_id");
+        String nowpage = (String) map.get("nowpage");
+        System.out.println("나우페이지를" + nowpage);
         System.out.println("맵" + map);
         System.out.println("리퀘" + request);
         ModelAndView mv = new ModelAndView();
-        if (menu_id.equals("MENU04")) {
-            mv.setViewName("redirect:/ImageBoard/List");
-        } else {
-            mv.setViewName("redirect:/Board/List?menu_id=" + menu_id);
+        if(menu_id.equals("MENU04")){
+            mv.setViewName("redirect:/ImageBoard/List?nowpage=" + nowpage);
+        } else{
+            mv.setViewName("redirect:/Board/List?menu_id=" + menu_id + "&nowpage=" + nowpage);
         }
 
         // 게시글 등록
@@ -114,8 +139,14 @@ public class BoardController {
     @RequestMapping("/Board/Update")
     public ModelAndView update(BoardVo boardVo) {
 
-        ModelAndView mv = new ModelAndView(
-                "redirect:/Board/View?idx=" + boardVo.getIdx() + "&menu_id=" + boardVo.getMenu_id());
+        ModelAndView mv = new ModelAndView();
+
+        if(boardVo.getMenu_id().equals("MENU04")){
+            mv.setViewName("redirect:/ImageBoard/List?nowpage=" + boardVo.getNowpage());
+        } else{
+            mv.setViewName("redirect:/Board/List?menu_id=" + boardVo.getMenu_id() + "&nowpage=" + boardVo.getNowpage());
+        }
+
         boardService.updateBoard(boardVo);
         return mv;
     }
@@ -123,9 +154,14 @@ public class BoardController {
     // 게시글 삭제
     // ---------------------------------------------------------------------------
     @RequestMapping("/Board/Delete")
-    public ModelAndView delete(String idx, String menu_id) {
+    public ModelAndView delete(String idx, String menu_id, String nowpage) {
         // System.out.println("idx는 뭐고? " + idx);
-        ModelAndView mv = new ModelAndView("redirect:/Board/List?menu_id=" + menu_id);
+        ModelAndView mv = new ModelAndView();
+        if(menu_id.equals("MENU04")){
+            mv.setViewName("redirect:/ImageBoard/List?nowpage=" + nowpage);
+        } else{
+            mv.setViewName("redirect:/Board/List?menu_id=" + menu_id + "&nowpage=" + nowpage);
+        }
         boardService.deleteBoard(idx);
         return mv;
     }
@@ -133,20 +169,42 @@ public class BoardController {
     // -----------------------------------------------------------------------------------------
 
     @RequestMapping("/ImageBoard/List")
-    public ModelAndView imageBoard() {
+    public ModelAndView imageBoard(
+        @RequestParam HashMap<String, Object> map
+    ) {
         ModelAndView mv = new ModelAndView("board/imageList");
 
         String menu_id = "MENU04";
+        map.put("menu_id", menu_id);
 
         // 메뉴
         MenuVo menu = menuService.getMenu(menu_id);
 
+        
+        // 총 글수
+        int totalcount = boardService.getTotalCount(map);
+        
+        // 페이징
+        int pagecount = 8;  //페이지당 출력할 갯수
+        int totalpagecount = totalcount % pagecount == 0 ? totalcount / pagecount : totalcount / pagecount + 1;
+        System.out.println("why?" + totalpagecount);
+        
+        int nowpage = Integer.parseInt((String)map.get("nowpage"));
+        int startnum = (nowpage - 1) * pagecount + 1;
+        int endnum = nowpage * pagecount;
+        
+        map.put("pagecount", pagecount);
+        map.put("nowpage", nowpage);
+        map.put("startnum", startnum);
+        map.put("endnum", endnum);
+        
         // BoardList - 게시글 목록
-        List<BoardVo> imageList = boardService.getBoardList(menu_id);
+        List<BoardVo> imageList = boardService.getBoardList(map);
 
+        mv.addObject("totalpagecount", totalpagecount);
         mv.addObject("imageList", imageList);
         mv.addObject("menu", menu);
-        // System.out.println("nope" + menuList);
+        // System.out.println("출력확인? " + totalcount);
         return mv;
     }
 

@@ -15,7 +15,7 @@
 
     <select id="getBoardList"
             resultType="com.example.toto.board.vo.BoardVo">
-
+<!-- 
                 SELECT
     B.IDX,
     B.MENU_ID,
@@ -41,9 +41,9 @@ WHERE
     B.MENU_ID = #{menu_id}
 ORDER BY
     B.IDX DESC
+     -->
             
             <!-- 부등호 오류 <![CDATA[ ] -->
-            <!-- 잠시만 안녕~
             <![CDATA[ 
 SELECT *
 FROM (
@@ -79,7 +79,7 @@ ORDER BY
 WHERE RNUM > #{ startnum } - 1
 AND RNUM <= #{ endnum }
             ]]>
-            -->
+           
             
     </select>
 

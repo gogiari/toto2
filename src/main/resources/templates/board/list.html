@@ -36,6 +36,17 @@
             background-color: aliceblue;
             cursor: pointer;
         }
+        .pagingLi {
+            width: 25px;
+            height: 25px;
+            float: left;
+            background-color: #5d5d5d;
+            color: white;
+            margin: 0 1px;
+        }
+        .pagingLi:hover{
+            cursor: pointer;
+        }
     </style>
 
     <div id="wrap">
@@ -44,12 +55,12 @@
             <section id="left_side" th:replace="~{/fragments/left_side :: leftFragment}"></section>
             <div id="right_side" th:replace="~{/fragments/right_side :: rightFragment}"></div>
             <div id="contents">
-                <div id="mainlist">
+                <div id="mainlist" style="height: 880px;">
                     <h2 style="text-align: center;" th:text="${menu.menu_name}"></h2>
                     <hr>
                     <div style="text-align: right;">
                         <th:block th:if="${session.user}">
-                            <button th:onclick="|location.href='@{/Board/WriteForm(menu_id=${param.menu_id})}'|">글쓰기</button>
+                            <button th:onclick="|location.href='@{/Board/WriteForm(menu_id=${param.menu_id},nowpage=${param.nowpage})}'|">글쓰기</button>
                         </th:block>
                         <th:block th:if="${session.user == null}">
                             <span>로그인을 하셔야 글쓰기가 가능합니다(</span><a th:href="@{/loginpage}">로그인 바로가기</a><span>)</span>
@@ -63,7 +74,7 @@
                             <th>날짜</th>
                             <th>조회수</th>
                         </tr>
-                        <tr class="board" th:each="board : ${boardList}" th:onclick="|location.href='@{View(idx=${board.idx},menu_id=${param.menu_id})}'|">
+                        <tr class="board" th:each="board : ${boardList}" th:onclick="|location.href='@{View(idx=${board.idx},menu_id=${param.menu_id},nowpage=${param.nowpage})}'|">
                             <td style="text-align: center;" th:text="${ board.idx }"></td>
                             <!-- <td style="padding-left: 10px;" th:text="${ board.title }"></td> -->
                             <td>
@@ -77,8 +88,41 @@
                         </tr>
                     </table>
                 </div>
+                    <div style="text-align: center;background-color: red;">
+                        <ul style="list-style: none;">
+                            <li class="pagingLi" th:onclick="|location.href='@{/Board/List(menu_id=${param.menu_id},nowpage=1)}'|">&lt;&lt;</li>
+                            <li class="pagingLi" th:onclick="bfPageFunction()">&lt;</li>
+                            <div id="pagenums"></div>
+                            <li class="pagingLi" th:onclick="aftPageFunction()">&gt;</li>
+                            <li class="pagingLi" th:onclick="|location.href='@{/Board/List(menu_id=${param.menu_id},nowpage=${totalpagecount})}'|">&gt;&gt;</li>
+                        </ul>
+                    </div>
             </div>
         </div>
     </div>
 </body>
+<script>
+    let pagenumsEl = document.querySelector('#pagenums');
+    let haha = '';
+    let menu_id = '[[${param.menu_id}]]';
+    for (let i = 1; i <= '[[${totalpagecount}]]'; i++) {
+        if ( '[[${param.nowpage}]]' == i ) {
+            haha += `<li style="background-color: white; color: black;" class="pagingLi" onclick="location.href='/Board/List?menu_id=${menu_id}&nowpage=${i}'">${i}</li>`;
+        } else{
+            haha += `<li class="pagingLi" onclick="location.href='/Board/List?menu_id=${menu_id}&nowpage=${i}'">${i}</li>`;
+        }
+    }
+    pagenumsEl.innerHTML = haha;
+
+    function bfPageFunction() {
+        let prepage = '[[${param.nowpage}]]' <= 1 ? 1 : '[[${param.nowpage}]]' - 1;
+        location.href = '/Board/List?menu_id=[[${param.menu_id}]]&nowpage=' + `${prepage}`;
+    }
+
+    function aftPageFunction() {
+        let prepage = '[[${param.nowpage}]]' >= '[[${totalpagecount}]]' ? '[[${totalpagecount}]]' : Number('[[${param.nowpage}]]') + 1;
+        location.href = '/Board/List?menu_id=[[${param.menu_id}]]&nowpage=' + `${prepage}`;
+        
+    }
+</script>
 </html>

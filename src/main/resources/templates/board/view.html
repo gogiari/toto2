@@ -88,16 +88,16 @@
                     <th:block th:if="${session.user}">
                         <th:block th:if="${session.user.username == boardVo.writer or session.user.username == '관리자'}">
                             <input type="button"
-                                th:onclick="|location.href='@{UpdateForm(idx=${param.idx},menu_id=${param.menu_id})}'|"
+                                th:onclick="|location.href='@{UpdateForm(idx=${param.idx},menu_id=${param.menu_id},nowpage=${param.nowpage})}'|"
                                 value="수정">
                             <input type="button" value="삭제">
                         </th:block>
                     </th:block>
                     <th:block th:if="${boardVo.menu_id == 'MENU04'}">
-                        <input type="button" th:onclick="|location.href='@{/ImageBoard/List}'|" value="목록">
+                        <input type="button" th:onclick="|location.href='@{/ImageBoard/List(nowpage=${param.nowpage})}'|" value="목록">
                     </th:block>
                     <th:block th:if="${boardVo.menu_id != 'MENU04'}">
-                        <input type="button" th:onclick="|location.href='@{List(menu_id=${param.menu_id})}'|"
+                        <input type="button" th:onclick="|location.href='@{List(menu_id=${param.menu_id},nowpage=${param.nowpage})}'|"
                             value="목록">
                     </th:block>
                 </div>
@@ -263,13 +263,16 @@
         tdpa.append(`<input id="setComment" width="100%" type="text" value="">`);
         let com_text = $('#setComment');
         latd.append(`<input id="inupcom" type="button" value="수정">`);
-        latd.append(`<input type="button" value="취소">`);
+        latd.append(`<input id="incanslecom" type="button" value="취소">`);
         $('#inupcom').click(function(){
             if(com_text.val() == null || com_text.val().trim() == ''){
                 alert("댓글에 입력된 값이 없습니다.")
                 return
             } 
             updateCommnet(com_text.val(), fcidx);
+        });
+        $('#incanslecom').click(function(){
+            refreshComments()
         });
     }
     function updateCommnet(comment_text, cidx){
@@ -303,7 +306,7 @@
     $('#board_set input[value="삭제"]').click(function () {
         if (confirm('게시글을 정말 삭제하시겠습니까?') == true) {
             alert('게시글을 삭제 하였습니다.');
-            location.href = "/Board/Delete?idx=[[${param.idx}]]&menu_id=[[${param.menu_id}]]";
+            location.href = "/Board/Delete?idx=[[${param.idx}]]&menu_id=[[${param.menu_id}]]&nowpage=[[${param.nowpage}]]";
         } else {
             alert('취소 했습니다.');
             return;

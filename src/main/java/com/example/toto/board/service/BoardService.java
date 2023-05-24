@@ -17,8 +17,8 @@ public class BoardService {
     @Autowired
     private BoardMapper boardMappber;
 
-    public List<BoardVo> getBoardList(String menu_id) {
-        List<BoardVo> boardList = boardMappber.getBoardList(menu_id);
+    public List<BoardVo> getBoardList(HashMap<String, Object> map) {
+        List<BoardVo> boardList = boardMappber.getBoardList(map);
         return boardList;
     }
 
@@ -63,6 +63,11 @@ public class BoardService {
 
     public void insertPdsBoard(HashMap<String, Object> map, HttpServletRequest request) {
         boardMappber.insertPdsBoard(map, request);
+    }
+
+    public int getTotalCount(HashMap<String, Object> map) {
+        int totalcount = boardMappber.getTotalCount(map);
+        return totalcount;
     }
 
 }

@@ -15,7 +15,7 @@ import com.example.toto.board.vo.CommentVo;
 @Mapper
 public interface BoardMapper {
 
-    List<BoardVo> getBoardList(String menu_id);
+    List<BoardVo> getBoardList(HashMap<String, Object> map);
 
     void insertBoard(HashMap<String, Object> map);
 
@@ -36,4 +36,6 @@ public interface BoardMapper {
     int updateComment(CommentVo commentVo);
 
     void insertPdsBoard(HashMap<String, Object> map, HttpServletRequest request);
+
+    int getTotalCount(HashMap<String, Object> map);
 }

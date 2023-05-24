@@ -111,7 +111,7 @@
             <p hidden id="hidcont" th:text="${boardVo.cont}"></p>
                 <h2>글수정</h2>
             <hr>
-            <form th:action="@{Update(idx=${boardVo.idx},menu_id=${boardVo.menu_id})}" method="post" enctype="multipart/form-data">
+            <form th:action="@{Update(idx=${boardVo.idx},menu_id=${boardVo.menu_id},nowpage=${param.nowpage})}" method="post" enctype="multipart/form-data">
                 <table>
                     <tr>
                         <td><b>제목<b></td>
@@ -125,10 +125,10 @@
                         <td colspan="2" style="text-align: right;">
                             <input type="submit" value="수정">
                             <th:block  th:if="${boardVo.menu_id == 'MENU04'}">
-                                <input type="button" th:onclick="|location.href='@{/ImageBoard/List}'|" value="목록">
+                                <input type="button" th:onclick="|location.href='@{/ImageBoard/List(nowpage=${param.nowpage})}'|" value="목록">
                             </th:block>
                             <th:block th:if="${boardVo.menu_id != 'MENU04'}">
-                                <input type="button" th:onclick="|location.href='@{List(menu_id=${param.menu_id})}'|" value="목록">
+                                <input type="button" th:onclick="|location.href='@{List(menu_id=${param.menu_id},nowpage=${param.nowpage})}'|" value="목록">
                             </th:block>
                             <!-- <input type="button" onclick="location.href='/Board/List'" value="목록"> -->
                         </td>

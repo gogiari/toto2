@@ -47,6 +47,9 @@
             color: white;
             margin: 0 1px;
         }
+        .pagingLi:hover{
+            cursor: pointer;
+        }
     </style>
 
     <div id="wrap">
@@ -62,7 +65,7 @@
                 </th:block>
                 <th:block th:if="${session.user}">
                     <button style="float: right;"
-                        th:onclick="|location.href='@{/Board/WriteForm(menu_id=MENU04)}'|">글쓰기</button>
+                        th:onclick="|location.href='@{/Board/WriteForm(menu_id=MENU04,nowpage=${param.nowpage})}'|">글쓰기</button>
                 </th:block>
                 <th:block th:if="${session.user == null}">
                     <div style="float: right;"><span>로그인을 하셔야 글쓰기가 가능합니다</span><button
@@ -71,7 +74,7 @@
                 <br>
                 <div style="padding: 10px 0 0 13px;">
                     <div class="imgList" th:each="imgList : ${imageList}"
-                        th:onclick="|location.href='@{/Board/View(menu_id=${imgList.menu_id},idx=${imgList.idx})}'|"
+                        th:onclick="|location.href='@{/Board/View(menu_id=${imgList.menu_id},idx=${imgList.idx},nowpage=${param.nowpage})}'|"
                         style="padding: 5px;border: 1px solid black;width: 210px; height: 220px;float: left; margin: 10px 5px 10px 5px;">
                         <div class="hididximg" hidden></div>
                         <div class="idximg"
@@ -92,10 +95,11 @@
                 <div style="height: 90%;">
                     <div style="text-align: center; padding-top: 85%;">
                         <ul style="list-style: none;">
-                            <li class="pagingLi">&lt;&lt;</li>
-                            <li class="pagingLi">&lt;</li>
-                            <li class="pagingLi">&gt;</li>
-                            <li class="pagingLi">&gt;&gt;</li>
+                            <li class="pagingLi" th:onclick="|location.href='@{/ImageBoard/List(nowpage=1)}'|">&lt;&lt;</li>
+                            <li class="pagingLi" th:onclick="bfPageFunction()">&lt;</li>
+                            <div id="pagenums"></div>
+                            <li class="pagingLi" th:onclick="aftPageFunction()">&gt;</li>
+                            <li class="pagingLi" th:onclick="|location.href='@{/ImageBoard/List(nowpage=${totalpagecount})}'|">&gt;&gt;</li>
                         </ul>
                     </div>
                 </div>
@@ -124,6 +128,29 @@
         }
     }
 
+    // 페이징
+    let pagenumsEl = document.querySelector('#pagenums');
+    let haha = '';
+    for (let i = 1; i <= '[[${totalpagecount}]]'; i++) {
+        if ( '[[${param.nowpage}]]' == i ) {
+            haha += `<li style="background-color: white; color: black;" class="pagingLi" onclick="location.href='/ImageBoard/List?nowpage=${i}'">${i}</li>`;
+        } else{
+            haha += `<li class="pagingLi" onclick="location.href='/ImageBoard/List?nowpage=${i}'">${i}</li>`;
+        }
+    }
+    pagenumsEl.innerHTML = haha;
+
+    function bfPageFunction() {
+        let prepage = '[[${param.nowpage}]]' <= 1 ? 1 : '[[${param.nowpage}]]' - 1;
+        location.href = `/ImageBoard/List?nowpage=${prepage}`;
+    }
+
+    function aftPageFunction() {
+        let prepage = '[[${param.nowpage}]]' >= '[[${totalpagecount}]]' ? '[[${totalpagecount}]]' : Number('[[${param.nowpage}]]') + 1;
+        location.href = `/ImageBoard/List?nowpage=${prepage}`;
+        
+    }
+    
 </script>
 
 </html>
