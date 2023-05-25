@@ -102,7 +102,7 @@
                     </th:block>
                 </div>
                 <div>
-                    <i class='bx bxs-message-rounded-dots'></i><span th:text="${commentList.size}"></span>
+                    <i class='bx bxs-message-rounded-dots'></i><span id="comsize" th:text="${commentList.size}"></span>
                 </div>
                 <div id="comments_area">
                     <div th:if="${session.user}" style="display: flex; justify-content: center;">
@@ -164,6 +164,7 @@
             dataType: 'json',
             success: function (comments) {
                 // alert("리프레쉬성공");
+                
                 $('#comments').empty();
                 $.each(comments, function (index, comment) {
                     var commentEntry = '<table>' +
@@ -182,6 +183,7 @@
                     commentEntry += '</td></table>';
                     $('#comments').append(commentEntry);
                 });
+                $('#comsize').text(comments.length);
             },
             error: function (xhr, status, error) {
                 console.log('Error:', error);
