@@ -23,7 +23,7 @@ public class UserController {
 
         List<UserVo> userList = userService.getUserList();
 
-        mv.setViewName("user/homeList");
+        mv.setViewName("user/homelist");
        
         mv.addObject("userList", userList);
         return mv;
@@ -37,7 +37,7 @@ public class UserController {
 
         List<UserVo> userList = userService.getUserList();
 
-        mv.setViewName("user/List");
+        mv.setViewName("user/list");
        
         mv.addObject("userList", userList);
         return mv;
@@ -49,7 +49,7 @@ public class UserController {
 
         List<UserVo> userList = userService.getUserList();
 
-        mv.setViewName("/fragments/header");
+        mv.setViewName("fragments/header");
        
         mv.addObject("userList", userList);
         return mv;
