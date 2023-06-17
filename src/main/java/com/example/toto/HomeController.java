@@ -27,7 +27,7 @@ public class HomeController {
         return "home_start";
     }
 
-    @GetMapping("/home")
+    @RequestMapping("/home")
     public String homepage() {
         return "home";
     }
@@ -83,7 +83,7 @@ public class HomeController {
     @RequestMapping("/userlist")
     public String userlist() {
 
-        return "/user/list";
+        return "user/list";
     }
 
     @RequestMapping("/fuck")
