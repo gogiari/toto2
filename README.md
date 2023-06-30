@@ -1,4 +1,4 @@
-### 기존 git에서 스타일 통일을 위해서 여기(현재git)로 이사함.
+### **기존 git에서 스타일 통일을 위해서 여기(현재git)로 이사함.**
 
 기존git => https://github.com/juhyunKIM90/toto.git 
 
