@@ -4,6 +4,7 @@
 
 <br>
 
+### 노션으로 생성하고 수정한 마크다운이라서 아래의 노션링크으로 보시면편합니다.**
 프로젝트 노션으로보기
 https://dent-mandrill-d55.notion.site/Team-Project-Green-Sports-b4cbcfe7da41422ead997f514082dc06?pvs=4
 
