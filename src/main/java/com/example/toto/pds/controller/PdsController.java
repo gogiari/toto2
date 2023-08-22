@@ -33,7 +33,7 @@ public class PdsController {
 		String contextRoot = new HttpServletRequestWrapper(request).getRealPath("/");
 		//String fileRoot = contextRoot+"resources/fileupload/"; 스프링부트는 getRealPath안됨(톰캣내부로들어감)
 		String fileRoot = "src/main/resources/fileupload/";
-        System.out.println("ㅅㅂ"+fileRoot);
+        System.out.println("파일루트"+fileRoot);
 		System.out.println("multi = " + multipartFile);
 		
 		String originalFileName = multipartFile.getOriginalFilename();	//오리지날 파일명
